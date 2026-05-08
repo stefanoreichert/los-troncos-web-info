@@ -6,18 +6,18 @@ import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const galleryImages = [
-  { src: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80&fit=crop", alt: "Pizza artesanal", category: "Pizzas" },
-  { src: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&q=80&fit=crop", alt: "Ambiente del restaurante", category: "Ambiente" },
-  { src: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=800&q=80&fit=crop", alt: "Cócteles artesanales", category: "Tragos" },
-  { src: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80&fit=crop", alt: "Porción de pizza", category: "Pizzas" },
-  { src: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&q=80&fit=crop", alt: "Salón elegante", category: "Ambiente" },
-  { src: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=80&fit=crop", alt: "Hamburguesa artesanal", category: "Cocina" },
-  { src: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80&fit=crop", alt: "Pizza margherita", category: "Pizzas" },
-  { src: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80&fit=crop", alt: "Bar nocturno", category: "Ambiente" },
-  { src: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&q=80&fit=crop", alt: "Cocktail de la casa", category: "Tragos" },
-  { src: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800&q=80&fit=crop", alt: "Pizza cuatro quesos", category: "Pizzas" },
-  { src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80&fit=crop", alt: "Mesa servida", category: "Cocina" },
-  { src: "https://images.unsplash.com/photo-1562802378-063ec186a863?w=800&q=80&fit=crop", alt: "Pizza en horno", category: "Cocina" },
+  { src: "/imagenes/pizza-palo-rosa.jpg", alt: "Pizza Palo Rosa — pizza insignia de Los Troncos con tomates cherry y pesto", category: "Pizzas" },
+  { src: "/imagenes/ambiente-interior.jpg", alt: "Interior elegante del salón de Los Troncos Resto Bar, Puerto Rico Misiones", category: "Ambiente" },
+  { src: "/imagenes/milanesa-napolitana.jpg", alt: "Milanesa Napolitana con jamón, tomate fresco y queso gratinado", category: "Cocina" },
+  { src: "/imagenes/pizza-kurupi.jpg", alt: "Pizza Kurupí con carne a cuchillo y cebolla caramelizada", category: "Pizzas" },
+  { src: "/imagenes/hamburguesa-tacuarembo.jpg", alt: "Hamburguesa Tacuarembó con doble medallón, cheddar y bacon", category: "Cocina" },
+  { src: "/imagenes/bife-chorizo.jpg", alt: "Bife de Chorizo con papas aplastadas y hierbas de la casa", category: "Carnes" },
+  { src: "/imagenes/pizza-aratigu.jpg", alt: "Pizza Araticú con provolone, jamón y morrones asados", category: "Pizzas" },
+  { src: "/imagenes/ambiente-01.jpg", alt: "Ambiente nocturno de Los Troncos Resto Bar", category: "Ambiente" },
+  { src: "/imagenes/milanesa-los-troncos.jpg", alt: "Milanesa Los Troncos con mozzarella, cheddar y panceta crocante", category: "Cocina" },
+  { src: "/imagenes/empanadas-arabes.jpg", alt: "Empanadas Árabes con carne especiada, cebolla, morrón y limón", category: "Cocina" },
+  { src: "/imagenes/sandwich-loro-negro.jpg", alt: "Sandwich Loro Negro con milanesa artesanal y guarnición", category: "Cocina" },
+  { src: "/imagenes/ambiente-02.jpg", alt: "Salón de Los Troncos Resto Bar, Puerto Rico Misiones", category: "Ambiente" },
 ];
 
 const aspectClasses = ["aspect-square", "aspect-[4/5]", "aspect-[3/4]"];

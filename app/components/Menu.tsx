@@ -4,14 +4,24 @@ import { useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
-type Category = "Pizzas" | "Hamburguesas" | "Picadas" | "Bebidas" | "Tragos" | "Postres";
+type Category =
+  | "Pizzas"
+  | "Hamburguesas"
+  | "Milanesas"
+  | "Carnes"
+  | "Empanadas"
+  | "Sándwiches"
+  | "Bebidas & Tragos"
+  | "Postres";
 
 const categories: Category[] = [
   "Pizzas",
   "Hamburguesas",
-  "Picadas",
-  "Bebidas",
-  "Tragos",
+  "Milanesas",
+  "Carnes",
+  "Empanadas",
+  "Sándwiches",
+  "Bebidas & Tragos",
   "Postres",
 ];
 
@@ -19,43 +29,350 @@ type MenuItem = { name: string; description: string; price: string; image: strin
 
 const menuItems: Record<Category, MenuItem[]> = {
   Pizzas: [
-    { name: "Mozzarella", description: "Tomate, mozzarella y albahaca fresca", price: "$3.500", image: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&q=75&fit=crop" },
-    { name: "Cuatro Quesos", description: "Mozzarella, roquefort, parmesano y brie", price: "$4.200", image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=400&q=75&fit=crop" },
-    { name: "Pepperoni", description: "Pepperoni artesanal y mozzarella extra", price: "$4.000", image: "https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=400&q=75&fit=crop" },
-    { name: "Jamón y Rúcula", description: "Jamón serrano, rúcula y tomates cherry", price: "$4.500", image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=400&q=75&fit=crop" },
-    { name: "Fugazzeta", description: "Cebolla caramelizada, aceitunas y mozzarella", price: "$3.800", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=75&fit=crop" },
-    { name: "Napolitana", description: "Tomate, mozzarella, aceitunas y albahaca", price: "$3.600", image: "https://images.unsplash.com/photo-1562802378-063ec186a863?w=400&q=75&fit=crop" },
+    {
+      name: "Palo Rosa",
+      description: "Nuestra pizza insignia con combinación única de ingredientes frescos, aceitunas, tomates cherry y un toque de pesto artesanal.",
+      price: "$16.000",
+      image: "/imagenes/pizza-palo-rosa.jpg",
+    },
+    {
+      name: "Kurupí",
+      description: "Masa artesanal, salsa de tomate, queso mozzarella con carne de ternera picada a cuchillo y cebolla caramelizada.",
+      price: "$20.000",
+      image: "/imagenes/pizza-kurupi.jpg",
+    },
+    {
+      name: "Araticú",
+      description: "Masa artesanal con queso mozzarella, provolone, jamón, morrones asados, cubierta de cebolla, oliva y orégano.",
+      price: "$22.000",
+      image: "/imagenes/pizza-aratigu.jpg",
+    },
+    {
+      name: "Hambur Pizza",
+      description: "Masa artesanal, salsa de tomate, queso mozzarella con cuatro medallones de carne, tomate fresco y huevo frito.",
+      price: "$27.000",
+      image: "/imagenes/hambur-pizza.jpg",
+    },
+    {
+      name: "Timbó",
+      description: "Pizza clásica con base de tomate artesanal, queso mozzarella extra y orégano fresco de la casa.",
+      price: "$14.000",
+      image: "/imagenes/pizza-palo-rosa.jpg",
+    },
+    {
+      name: "4 Quesos",
+      description: "Selección de cuatro quesos artesanales: mozzarella, provolone, roquefort y parmesano sobre masa crujiente.",
+      price: "$18.000",
+      image: "/imagenes/pizza-aratigu.jpg",
+    },
+    {
+      name: "Los Troncos",
+      description: "La pizza de la casa: combinación especial del chef con ingredientes premium seleccionados de la temporada.",
+      price: "$19.000",
+      image: "/imagenes/pizza-kurupi.jpg",
+    },
+    {
+      name: "Anchico",
+      description: "Jamón crudo, rúcula fresca, tomates cherry, lascas de parmesano y reducción de balsámico sobre masa artesanal.",
+      price: "$20.000",
+      image: "/imagenes/pizza-aratigu.jpg",
+    },
   ],
   Hamburguesas: [
-    { name: "Classic Burger", description: "Carne artesanal, queso cheddar, lechuga y tomate", price: "$4.800", image: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=75&fit=crop" },
-    { name: "BBQ Bacon", description: "Carne, bacon crocante, salsa BBQ y cheddar fundido", price: "$5.500", image: "https://images.unsplash.com/photo-1553979459-d2229ba7433a?w=400&q=75&fit=crop" },
-    { name: "Crispy Chicken", description: "Pollo crispy, salsa ranch, pickles y lechuga", price: "$4.500", image: "https://images.unsplash.com/photo-1606755962773-d324e0a13086?w=400&q=75&fit=crop" },
-    { name: "Veggie Burger", description: "Medallón de garbanzos y verduras grilladas", price: "$4.200", image: "https://images.unsplash.com/photo-1525059696034-4967a8e1dca2?w=400&q=75&fit=crop" },
+    {
+      name: "Tacuarembó",
+      description: "Doble medallón de carne artesanal, cebolla caramelizada, queso cheddar y bacon crocante. Acompañada de papas fritas.",
+      price: "$13.000",
+      image: "/imagenes/hamburguesa-tacuarembo.jpg",
+    },
+    {
+      name: "Cedro Misionero",
+      description: "Medallón de carne, jamón, doble queso, panceta, lechuga, tomates cherry caramelizados y huevo frito. Con guarnición.",
+      price: "$10.500",
+      image: "/imagenes/hamburguesa-cedro.jpg",
+    },
+    {
+      name: "Lapacho Negro",
+      description: "Clásica hamburguesa artesanal con queso cheddar, lechuga, tomate y salsa de la casa en pan brioche tostado.",
+      price: "$9.500",
+      image: "/imagenes/hamburguesa-tacuarembo.jpg",
+    },
+    {
+      name: "Araucaria",
+      description: "Hamburguesa con doble queso fundido, cebolla crispy, pepinos encurtidos y mayonesa casera de la casa.",
+      price: "$11.500",
+      image: "/imagenes/hamburguesa-cedro.jpg",
+    },
+    {
+      name: "Cancharana",
+      description: "Medallón de carne artesanal, queso brie, champiñones salteados, rúcula y salsa de mostaza antigua.",
+      price: "$11.000",
+      image: "/imagenes/hamburguesa-tacuarembo.jpg",
+    },
+    {
+      name: "María Preta",
+      description: "Medallón de pollo grillado, queso brie, rúcula, tomates cherry y salsa de miel con mostaza en pan artesanal.",
+      price: "$12.000",
+      image: "/imagenes/hamburguesa-cedro.jpg",
+    },
+    {
+      name: "Laurel Negro",
+      description: "Doble medallón con queso azul fundido, cebolla caramelizada al vino tinto y reducción de balsámico.",
+      price: "$12.000",
+      image: "/imagenes/hamburguesa-tacuarembo.jpg",
+    },
+    {
+      name: "Chicken Burger",
+      description: "Medallón de pollo crocante, salsa ranch casera, pickles, lechuga fresca y tomate en pan artesanal.",
+      price: "$10.500",
+      image: "/imagenes/hamburguesa-cedro.jpg",
+    },
+    {
+      name: "Kid Burger",
+      description: "Pequeña hamburguesa artesanal con queso cheddar, lechuga y kétchup. Ideal para los más chicos.",
+      price: "$8.000",
+      image: "/imagenes/hamburguesa-tacuarembo.jpg",
+    },
   ],
-  Picadas: [
-    { name: "Picada Clásica", description: "Jamón, salame, queso, aceitunas y panificados", price: "$6.500", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=75&fit=crop" },
-    { name: "Picada Premium", description: "Jamón serrano, brie, uvas, nueces y miel", price: "$9.500", image: "https://images.unsplash.com/photo-1476224203421-9ac39bcb3327?w=400&q=75&fit=crop" },
-    { name: "Tabla de Quesos", description: "Selección de 4 quesos artesanales con acompañamientos", price: "$7.000", image: "https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400&q=75&fit=crop" },
+  Milanesas: [
+    {
+      name: "Napolitana",
+      description: "Clásica de la gastronomía rioplatense: carne jugosa y crujiente, cubierta con jamón, tomate fresco y queso fundido gratinado al punto justo.",
+      price: "$16.500",
+      image: "/imagenes/milanesa-napolitana.jpg",
+    },
+    {
+      name: "A Caballo",
+      description: "Clásica milanesa de ternera, crujiente y jugosa, coronada con un huevo frito y hierbas frescas. Con guarnición a elección.",
+      price: "$15.000",
+      image: "/imagenes/milanesa-caballo.jpg",
+    },
+    {
+      name: "A la Suiza",
+      description: "Carne jugosa y crujiente con raíces europeas, cubierta con salsa blanca, jamón y queso gratinado al punto justo.",
+      price: "$16.500",
+      image: "/imagenes/milanesa-suiza.jpg",
+    },
+    {
+      name: "Los Troncos",
+      description: "Ternera dorada cubierta con mozzarella y cheddar fundidos, coronada con panceta crocante y huevo frito. Con guarnición.",
+      price: "$17.000",
+      image: "/imagenes/milanesa-los-troncos.jpg",
+    },
+    {
+      name: "De Ternera",
+      description: "Milanesa clásica de ternera, fina, crujiente por fuera y tierna por dentro, con pan rallado y especias de la casa.",
+      price: "$14.000",
+      image: "/imagenes/milanesa-napolitana.jpg",
+    },
+    {
+      name: "Desbordé",
+      description: "Milanesa extra grande con doble cobertura: salsa napolitana, jamón, queso cheddar, mozzarella y panceta. Para los más atrevidos.",
+      price: "$21.000",
+      image: "/imagenes/milanesa-los-troncos.jpg",
+    },
   ],
-  Bebidas: [
-    { name: "Agua Mineral", description: "Con o sin gas 500ml", price: "$800", image: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=400&q=75&fit=crop" },
-    { name: "Gaseosas", description: "Coca-Cola, Fanta o Sprite 350ml", price: "$950", image: "https://images.unsplash.com/photo-1624552184280-9e48a02bf8cd?w=400&q=75&fit=crop" },
-    { name: "Limonada Natural", description: "Limón fresco, menta y azúcar 500ml", price: "$1.200", image: "https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=400&q=75&fit=crop" },
-    { name: "Cerveza Artesanal", description: "Rubia, Negra o Roja de producción local", price: "$1.800", image: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=75&fit=crop" },
-    { name: "Vino de la Casa", description: "Copa de vino tinto o blanco seleccionado", price: "$1.500", image: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=75&fit=crop" },
+  Carnes: [
+    {
+      name: "Lomo al Champiñón",
+      description: "Tiernos medallones de lomo en una rica salsa de champiñones, cebollita y crema, servidos con puré de calabaza.",
+      price: "$17.000",
+      image: "/imagenes/lomo-champignon.jpg",
+    },
+    {
+      name: "Bife de Chorizo",
+      description: "Bife de chorizo jugoso y tierno, acompañado de papas aplastadas doradas y crujientes, con un toque de hierbas que realza su sabor.",
+      price: "$17.000",
+      image: "/imagenes/bife-chorizo.jpg",
+    },
+    {
+      name: "Lomo a la Provenzal",
+      description: "Medallones de lomo con salsa provenzal de ajo, perejil y aceite de oliva extra virgen. Con guarnición a elección.",
+      price: "$17.000",
+      image: "/imagenes/lomo-champignon.jpg",
+    },
+    {
+      name: "Pastel de Papa",
+      description: "Suave puré de papas cremoso, relleno con carne especiada y gratinado al horno. Combinación cálida y reconfortante con toque gourmet.",
+      price: "$15.000",
+      image: "/imagenes/bife-chorizo.jpg",
+    },
   ],
-  Tragos: [
-    { name: "Aperol Spritz", description: "Aperol, prosecco, soda y naranja", price: "$2.800", image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&q=75&fit=crop" },
-    { name: "Mojito Clásico", description: "Ron, menta fresca, limón, azúcar y soda", price: "$2.500", image: "https://images.unsplash.com/photo-1551504734-5ee1c4a1479b?w=400&q=75&fit=crop" },
-    { name: "Fernet con Coca", description: "Fernet Branca con Coca-Cola", price: "$2.200", image: "https://images.unsplash.com/photo-1568644396922-5c3bfae12521?w=400&q=75&fit=crop" },
-    { name: "Tequila Sunrise", description: "Tequila, jugo de naranja y granadina", price: "$2.600", image: "https://images.unsplash.com/photo-1587889873849-e7f27de99c2a?w=400&q=75&fit=crop" },
-    { name: "Negroni", description: "Gin, vermouth rosso y Campari con rodaja de naranja", price: "$2.800", image: "https://images.unsplash.com/photo-1546171753-97d7676e4602?w=400&q=75&fit=crop" },
+  Empanadas: [
+    {
+      name: "Árabes",
+      description: "Empanadas rellenas de carne especial, sazonadas con cebolla, morrón y un toque de limón. Receta tradicional de la casa.",
+      price: "$2.000 c/u",
+      image: "/imagenes/empanadas-arabes.jpg",
+    },
+    {
+      name: "Capresse",
+      description: "Rellenas de mozzarella fresca, tomate y albahaca, acompañadas de salsa de pesto artesanal.",
+      price: "$2.000 c/u",
+      image: "/imagenes/empanadas-capresse.jpg",
+    },
+    {
+      name: "De Verdura",
+      description: "Empanadas artesanales de verduras frescas de temporada y queso, horneadas en horno de barro.",
+      price: "$1.800 c/u",
+      image: "/imagenes/empanadas-verdura.jpg",
+    },
+    {
+      name: "Jamón y Queso",
+      description: "Clásica combinación de jamón y queso fundido en masa casera crujiente, horneada a la perfección.",
+      price: "$1.800 c/u",
+      image: "/imagenes/empanadas-capresse.jpg",
+    },
+    {
+      name: "Carne Molida",
+      description: "Carne molida sazonada con especias de la casa, cebolla, huevo y aceitunas en masa artesanal horneada.",
+      price: "$1.800 c/u",
+      image: "/imagenes/empanadas-arabes.jpg",
+    },
+    {
+      name: "Cuatro Quesos",
+      description: "Mozzarella, provolone, roquefort y parmesano en masa crocante artesanal. Para los amantes del queso.",
+      price: "$2.000 c/u",
+      image: "/imagenes/empanadas-verdura.jpg",
+    },
+    {
+      name: "Carne a Cuchillo",
+      description: "Carne cortada a cuchillo, marinada con hierbas y especias del campo, en masa artesanal dorada al horno.",
+      price: "$2.200 c/u",
+      image: "/imagenes/empanadas-arabes.jpg",
+    },
+  ],
+  Sándwiches: [
+    {
+      name: "Loro Negro",
+      description: "Pan artesanal con milanesa de carne de la casa, lechuga, tomate, huevo frito, jamón y queso. Con guarnición.",
+      price: "$15.000",
+      image: "/imagenes/sandwich-loro-negro.jpg",
+    },
+    {
+      name: "Ibirá",
+      description: "Pan árabe relleno de carne desmechada al vino tinto, cebolla y morrones salteados, con suave salsa de ajo y especias.",
+      price: "$15.000",
+      image: "/imagenes/sandwich-ibira.jpg",
+    },
+    {
+      name: "Guatembú Blanco",
+      description: "Pollo grillado, queso brie, rúcula, tomates cherry y mayonesa de hierbas en pan de campo artesanal.",
+      price: "$13.000",
+      image: "/imagenes/sandwich-loro-negro.jpg",
+    },
+    {
+      name: "Angelim Rojo",
+      description: "Pan rústico con bife a la parrilla, queso provolone, chimichurri de la casa, cebolla y morrones asados.",
+      price: "$16.000",
+      image: "/imagenes/sandwich-ibira.jpg",
+    },
+    {
+      name: "Los Troncos",
+      description: "El sándwich insignia: milanesa, doble queso, panceta, huevo frito y todos los ingredientes premium de la casa.",
+      price: "$16.000",
+      image: "/imagenes/sandwich-loro-negro.jpg",
+    },
+    {
+      name: "Tostado",
+      description: "Tostado artesanal con jamón y queso, tostado a la piedra con manteca de hierbas.",
+      price: "$8.000",
+      image: "/imagenes/sandwich-ibira.jpg",
+    },
+    {
+      name: "Veggie",
+      description: "Verduras grilladas, queso brie, rúcula, tomates cherry y pesto casero en pan integral artesanal.",
+      price: "$8.500",
+      image: "/imagenes/sandwich-loro-negro.jpg",
+    },
+  ],
+  "Bebidas & Tragos": [
+    {
+      name: "Aperol Spritz",
+      description: "Aperol, prosecco, soda y rodaja de naranja fresca. Refrescante y elegante.",
+      price: "$6.500",
+      image: "/imagenes/ambiente-01.jpg",
+    },
+    {
+      name: "Fernet con Coca",
+      description: "Fernet Branca con Coca-Cola helada. El clásico argentino infalible.",
+      price: "$6.000",
+      image: "/imagenes/ambiente-interior.jpg",
+    },
+    {
+      name: "Cuba Libre",
+      description: "Ron, Coca-Cola y toque de limón fresco sobre hielo.",
+      price: "$6.500",
+      image: "/imagenes/ambiente-01.jpg",
+    },
+    {
+      name: "Gin Tonic",
+      description: "Gin premium con agua tónica artesanal, pepino, limón y hierbas aromáticas.",
+      price: "$6.500",
+      image: "/imagenes/ambiente-interior.jpg",
+    },
+    {
+      name: "Mojito",
+      description: "Ron, menta fresca, limón, azúcar y soda con hielo triturado.",
+      price: "$6.000",
+      image: "/imagenes/ambiente-01.jpg",
+    },
+    {
+      name: "Stella Artois",
+      description: "Cerveza Stella Artois fría, servida en copa helada.",
+      price: "$7.500",
+      image: "/imagenes/ambiente-interior.jpg",
+    },
+    {
+      name: "Patagonia Amber",
+      description: "Cerveza artesanal Patagonia Amber Lager con notas carameladas.",
+      price: "$7.000",
+      image: "/imagenes/ambiente-01.jpg",
+    },
+    {
+      name: "Corona 710ml",
+      description: "Corona Extra en botella 710ml con rodaja de limón. Ligera y refrescante.",
+      price: "$7.000",
+      image: "/imagenes/ambiente-interior.jpg",
+    },
+    {
+      name: "Limonada Natural",
+      description: "Limón exprimido, agua mineral, azúcar y menta fresca. 500ml de frescura natural.",
+      price: "$7.000",
+      image: "/imagenes/ambiente-01.jpg",
+    },
+    {
+      name: "Coca-Cola 1.5L",
+      description: "Gaseosa Coca-Cola en botella familiar, ideal para compartir.",
+      price: "$5.000",
+      image: "/imagenes/ambiente-interior.jpg",
+    },
   ],
   Postres: [
-    { name: "Tiramisú", description: "Receta italiana clásica con mascarpone y café", price: "$2.500", image: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=400&q=75&fit=crop" },
-    { name: "Volcán de Chocolate", description: "Bizcochuelo tibio con centro fundido y helado", price: "$2.800", image: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?w=400&q=75&fit=crop" },
-    { name: "Panna Cotta", description: "Vainilla con coulis de frutos rojos", price: "$2.200", image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=400&q=75&fit=crop" },
-    { name: "Helado Artesanal", description: "Tres bochas de sabores de estación", price: "$1.800", image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=400&q=75&fit=crop" },
+    {
+      name: "Flan Casero",
+      description: "Flan artesanal de la casa con dulce de leche y crema chantilly. Receta tradicional preparada diariamente.",
+      price: "$5.500",
+      image: "/imagenes/ambiente-interior.jpg",
+    },
+    {
+      name: "Bombón Helado",
+      description: "Bombón helado artesanal bañado en chocolate amargo con corazón cremoso. Frío, suave e irresistible.",
+      price: "$5.500",
+      image: "/imagenes/ambiente-02.jpg",
+    },
+    {
+      name: "Panqueque de DDL",
+      description: "Panqueque casero relleno de dulce de leche artesanal, flameado a la naranja y servido con crema.",
+      price: "$5.500",
+      image: "/imagenes/ambiente-interior.jpg",
+    },
+    {
+      name: "Helado Artesanal",
+      description: "Selección de sabores artesanales de temporada. Consultá con nuestro personal.",
+      price: "Consultar",
+      image: "/imagenes/ambiente-02.jpg",
+    },
   ],
 };
 
