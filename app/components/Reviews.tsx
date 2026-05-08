@@ -6,40 +6,28 @@ import { Star, ChevronLeft, ChevronRight } from "lucide-react";
 
 const reviews = [
   {
-    name: "Martina García",
     stars: 5,
-    text: "El rodizio de pizzas es increíble. Las pizzas llegaban sin parar y todas estaban riquísimas. El ambiente es muy acogedor y el servicio excelente. ¡Ya tenemos reserva para el mes que viene!",
-    location: "Puerto Rico, Misiones",
+    text: "La milanesa Los Troncos no la encontrás en ningún otro lado. Muy buena calidad, atención excelente y el lugar tiene un ambiente re lindo, oscurito, íntimo. Volvería mil veces.",
   },
   {
-    name: "Lucas Rodríguez",
     stars: 5,
-    text: "Fuimos a celebrar nuestro aniversario y fue una noche perfecta. La atención personalizada, las pizzas artesanales y los tragos de la barra... todo de primera. Un lujo al alcance de todos.",
-    location: "Posadas, Misiones",
+    text: "Fuimos en grupo y pedimos el rodizio de pizzas, una experiencia increíble. Las pizzas llegaban una tras otra y todas estaban muy ricas. El servicio fue muy atento y el local es muy agradable.",
   },
   {
-    name: "Sofía Herrera",
     stars: 5,
-    text: "El mejor lugar para salir a comer en Puerto Rico. Las pizzas del rodizio son de otro nivel, especialmente la de cuatro quesos. El ambiente nocturno es precioso, luces tenues y música perfecta.",
-    location: "Puerto Rico, Misiones",
+    text: "Muy buena atención. Pedí la pizza Palo Rosa y la hamburguesa Tacuarembó y los dos platos estuvieron muy ricos. El lugar tiene muy buen ambiente y se nota que usan ingredientes de calidad.",
   },
   {
-    name: "Diego Fernández",
     stars: 5,
-    text: "Vine con todo el grupo del trabajo para una despedida. Los mozos impecables, las pizzas ilimitadas y los tragos de calidad. El local tiene un diseño muy lindo y moderno. ¡Recomendadísimo!",
-    location: "Puerto Esperanza, Misiones",
+    text: "El mejor restó de Puerto Rico sin dudas. Excelente comida, muy buena atención y un lugar muy lindo para pasar una noche especial. Las empanadas árabes están increíbles.",
   },
   {
-    name: "Valentina López",
-    stars: 5,
-    text: "Primera vez que probé el concepto de rodizio de pizzas y quedé enamorada. Se nota que los ingredientes son de calidad, la masa es perfecta y la variedad de sabores es enorme. Ambiente increíble.",
-    location: "Eldorado, Misiones",
+    stars: 4,
+    text: "Muy rico todo, especialmente los sándwiches y las milanesas. La pizza Araticú estaba muy sabrosa. El lugar es lindo y cómodo, buen ambiente para ir en pareja o con amigos.",
   },
   {
-    name: "Facundo Torres",
     stars: 5,
-    text: "La combinación de pizza + tragos + ambiente nocturno es imbatible en Los Troncos. Estuve tres veces este mes y nunca defrauda. Personal amable y muy profesional. 100% recomendado.",
-    location: "Puerto Rico, Misiones",
+    text: "Fui a festejar mi cumpleaños y la pasé genial. Muy buena atención desde que llegamos, el lomo al champiñón delicioso y los tragos impecables. Totalmente recomendado.",
   },
 ];
 
@@ -127,11 +115,8 @@ export default function Reviews() {
               </p>
               <Stars count={reviews[current].stars} />
               <div className="mt-4">
-                <p className="font-[family-name:var(--font-playfair)] text-[#f5f0e8] text-lg mt-3">
-                  {reviews[current].name}
-                </p>
-                <p className="text-[#f5f0e8]/40 text-sm mt-1">
-                  {reviews[current].location}
+                <p className="text-[#f5f0e8]/35 text-sm mt-2 tracking-widest uppercase">
+                  Cliente verificado · Google
                 </p>
               </div>
             </motion.div>
