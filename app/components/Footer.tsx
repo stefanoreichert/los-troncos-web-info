@@ -117,19 +117,19 @@ export default function Footer() {
               <li className="flex items-start gap-3">
                 <MapPin size={15} className="text-[#d4622a] mt-0.5 shrink-0" />
                 <span className="text-[#f5f0e8]/42 text-sm leading-relaxed">
-                  Av. San Martín 1234, Puerto Rico, Misiones
+                  Puerto Rico, Misiones, Argentina
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={15} className="text-[#d4622a] shrink-0" />
                 <span className="text-[#f5f0e8]/42 text-sm">
-                  +54 9 3743 000-000
+                  +54 9 3743 611895
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Clock size={15} className="text-[#d4622a] shrink-0" />
                 <span className="text-[#f5f0e8]/42 text-sm">
-                  Abrimos de noche todos los días
+                  Jue–Dom: desde las 19:30 hs
                 </span>
               </li>
             </ul>
