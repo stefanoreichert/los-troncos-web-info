@@ -35,17 +35,17 @@ export default function Location() {
               {
                 icon: <MapPin size={18} />,
                 title: "Dirección",
-                desc: "Av. San Martín 1234, Puerto Rico, Misiones, Argentina",
+                desc: "Puerto Rico, Misiones, Argentina",
               },
               {
                 icon: <Phone size={18} />,
                 title: "Teléfono",
-                desc: "+54 9 3743 000-000",
+                desc: "+54 9 3743 611895",
               },
               {
                 icon: <Clock size={18} />,
                 title: "Horarios",
-                desc: "Lunes a Domingo: 20:00 — 01:00 hs",
+                desc: "Jue–Dom: desde las 19:30 hs · Lun–Mié cerrado",
               },
             ].map((item, i) => (
               <div
@@ -63,7 +63,7 @@ export default function Location() {
             {/* Social */}
             <div className="flex gap-3 pt-2">
               <a
-                href="https://instagram.com/lostroncosrestobar"
+                href="https://www.instagram.com/lostroncos_restobar/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-br from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
