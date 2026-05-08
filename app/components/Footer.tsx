@@ -22,8 +22,9 @@ const navLinks = [
 ];
 
 const horarios = [
-  ["Lunes – Jueves", "20:00 – 00:30"],
-  ["Viernes – Sábado", "20:00 – 01:30"],
+  ["Lunes – Miercoles", "cerrado – cerrado"],
+  ["Jueves", " Rodizio: 19:30 – 00:30"],
+  ["Viernes – Sábado", "19:30 – 01:30"],
   ["Domingo", "20:00 – 00:00"],
 ];
 
@@ -50,7 +51,7 @@ export default function Footer() {
             </p>
             <div className="flex gap-3 mt-5">
               <a
-                href="https://instagram.com/lostroncosrestobar"
+                href="https://www.instagram.com/lostroncos_restobar/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-[#1a1a1a] hover:bg-[#722f37] rounded-lg transition-colors duration-300"
@@ -59,7 +60,7 @@ export default function Footer() {
                 <InstagramIcon />
               </a>
               <a
-                href="https://facebook.com/lostroncosrestobar"
+                href="https://www.facebook.com/lostroncos.restobar.2025"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 bg-[#1a1a1a] hover:bg-[#1877f2] rounded-lg transition-colors duration-300"

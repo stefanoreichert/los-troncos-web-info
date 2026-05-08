@@ -71,7 +71,7 @@ export default function Location() {
                 <InstagramSvg /> Instagram
               </a>
               <a
-                href="https://facebook.com/lostroncosrestobar"
+                href="https://www.facebook.com/lostroncos.restobar.2025" 
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-5 py-2.5 bg-[#1877f2] hover:bg-[#166fe5] text-white rounded-xl text-sm font-medium transition-colors"
@@ -82,7 +82,7 @@ export default function Location() {
 
             {/* WhatsApp CTA */}
             <a
-              href="https://wa.me/5493743000000?text=Hola!%20Quiero%20hacer%20una%20reserva."
+              href="https://wa.me/543743611895?text=Hola!%20Quiero%20realizar%20una%20reserva%20por%20favor."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-3 px-6 py-3 bg-[#25D366] hover:bg-[#1da851] text-white rounded-xl transition-colors duration-300 text-sm font-medium w-fit"
@@ -97,7 +97,7 @@ export default function Location() {
           {/* Google Maps */}
           <div className="rounded-2xl overflow-hidden border border-[#2c1f0e]/40 h-80 lg:h-[420px]">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57830.40167!2d-55.0471!3d-26.8219!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9457ebe8fa5!2sPuerto%20Rico%2C%20Misiones!5e0!3m2!1ses!2sar!4v1700000000000!5m2!1ses!2sar"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3573.4!2d-55.0299537!3d-26.8197802!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94f8271ff888eb2d%3A0x89463a53aaf7caf8!2sLos%20Troncos%20Resto%20Bar!5e0!3m2!1ses!2sar!4v1715200000000!5m2!1ses!2sar"
               width="100%"
               height="100%"
               style={{

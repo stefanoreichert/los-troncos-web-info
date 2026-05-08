@@ -2,9 +2,9 @@
 
 import { motion } from "framer-motion";
 
-const WHATSAPP_NUMBER = "5493743000000";
+const WHATSAPP_NUMBER = "+543743611895";
 const WHATSAPP_MESSAGE =
-  "Hola! Quiero hacer una reserva en Los Troncos Resto Bar.";
+  "Hola! Quiero realizar una reserva por favor.";
 
 export default function WhatsAppButton() {
   return (
