@@ -57,7 +57,37 @@ const sectionLabel =
 const sectionTitle =
   "font-[family-name:var(--font-playfair)] text-4xl font-semibold leading-tight text-[#fff8ee] sm:text-6xl lg:text-7xl";
 
+const menuPages = [
+  "/imagenes/carta-1.jpg",
+  "/imagenes/carta-2.jpg",
+  "/imagenes/carta-3.jpg",
+  "/imagenes/carta-4.jpg",
+  "/imagenes/carta-5.jpg",
+  "/imagenes/carta-6.jpg",
+  "/imagenes/carta-7.jpg",
+  "/imagenes/carta-8.jpg",
+];
+
 export function MenuImageSection() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const [page, setPage] = useState(0);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setModalOpen(false);
+      if (e.key === "ArrowRight") setPage((p) => Math.min(menuPages.length - 1, p + 1));
+      if (e.key === "ArrowLeft") setPage((p) => Math.max(0, p - 1));
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [modalOpen]);
+
+  function openModal(startPage = 0) {
+    setPage(startPage);
+    setModalOpen(true);
+  }
+
   return (
     <section id="menu" className="relative overflow-hidden bg-[#050403] px-5 py-28 sm:px-8">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-[#050403] to-transparent" />
@@ -66,29 +96,21 @@ export function MenuImageSection() {
       <Reveal className="relative mx-auto max-w-7xl">
         <div className="mb-12 max-w-3xl">
           <p className={sectionLabel}>Menu</p>
-          <h2 className={sectionTitle}>
-            Carta visual, simple y elegante.
-          </h2>
+          <h2 className={sectionTitle}>La carta completa.</h2>
           <p className="mt-6 max-w-2xl text-base leading-8 text-[#fff4e3]/58">
-            Un espacio preparado para mostrar las imagenes reales del menu con
-            buena lectura, sombra suave y foco total en la carta.
+            Hace click en cualquier carta para verla completa.
           </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {[
-            {
-              title: "Carta principal",
-              subtitle: "Platos, pizzas, hamburguesas y especialidades",
-            },
-            {
-              title: "Bebidas y tragos",
-              subtitle: "Bar, cocteles, cervezas y opciones para compartir",
-            },
+            { title: "Carta principal", subtitle: "Platos, pizzas, hamburguesas y especialidades", startPage: 0 },
+            { title: "Bebidas y tragos", subtitle: "Bar, cocteles, cervezas y opciones para compartir", startPage: 4 },
           ].map((item) => (
-            <div
+            <button
               key={item.title}
-              className="group relative min-h-[440px] overflow-hidden rounded-[34px] border border-white/10 bg-[#0d0907] p-4 shadow-[0_34px_110px_rgba(0,0,0,0.38)] sm:min-h-[560px] sm:p-6"
+              onClick={() => openModal(item.startPage)}
+              className="group relative min-h-[440px] w-full cursor-pointer overflow-hidden rounded-[34px] border border-white/10 bg-[#0d0907] p-4 shadow-[0_34px_110px_rgba(0,0,0,0.38)] text-left transition-all duration-300 hover:border-[#ffb36b]/30 hover:shadow-[0_40px_120px_rgba(240,138,60,0.18)] sm:min-h-[560px] sm:p-6"
             >
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,179,107,0.18),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_35%)] opacity-80" />
               <div className="relative flex h-full min-h-[408px] items-center justify-center overflow-hidden rounded-[26px] border border-[#fff4e3]/12 bg-[#f3e4cf] p-5 text-center transition-transform duration-700 group-hover:scale-[1.015] sm:min-h-[512px] sm:p-8">
@@ -103,13 +125,84 @@ export function MenuImageSection() {
                   <p className="mx-auto mt-5 max-w-sm text-sm leading-7 text-[#1b100b]/58">
                     {item.subtitle}
                   </p>
-                  <div className="mt-10 h-px w-28 bg-gradient-to-r from-transparent via-[#8b3e1f]/45 to-transparent" />
+                  <div className="mt-8 h-px w-28 bg-gradient-to-r from-transparent via-[#8b3e1f]/45 to-transparent" />
+                  <p className="mt-6 text-[10px] font-bold uppercase tracking-[0.28em] text-[#8b3e1f]/70 transition-colors group-hover:text-[#8b3e1f]">
+                    Toca para ver la carta completa →
+                  </p>
                 </div>
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </Reveal>
+
+      {/* ─── Modal carta completa ────────────────────────────────── */}
+      {modalOpen && (
+        <div
+          className="fixed inset-0 z-[80] flex items-center justify-center bg-[#050403]/95 backdrop-blur-2xl"
+          onClick={() => setModalOpen(false)}
+        >
+          <div
+            className="relative flex w-full max-w-xl flex-col items-center px-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header */}
+            <div className="mb-4 flex w-full items-center justify-between">
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#ffb36b]">
+                Página {page + 1} / {menuPages.length}
+              </span>
+              <button
+                onClick={() => setModalOpen(false)}
+                className="text-xs font-bold uppercase tracking-[0.25em] text-[#fff4e3]/50 transition-colors hover:text-[#fff4e3]"
+              >
+                Cerrar ✕
+              </button>
+            </div>
+
+            {/* Imagen */}
+            <div className="relative w-full overflow-hidden rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.7)]">
+              <Image
+                src={menuPages[page]}
+                alt={`Menú página ${page + 1}`}
+                width={800}
+                height={1100}
+                className="h-auto max-h-[76vh] w-full object-contain"
+                priority
+              />
+            </div>
+
+            {/* Navegación */}
+            <div className="mt-5 flex items-center gap-5">
+              <button
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={page === 0}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-xl text-[#fff4e3]/60 transition-all hover:border-[#ffb36b]/50 hover:text-[#ffb36b] disabled:opacity-20"
+              >
+                ‹
+              </button>
+              {/* Dots */}
+              <div className="flex gap-2">
+                {menuPages.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setPage(i)}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === page ? "w-6 bg-[#ffb36b]" : "w-1.5 bg-white/25 hover:bg-white/50"
+                    }`}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={() => setPage((p) => Math.min(menuPages.length - 1, p + 1))}
+                disabled={page === menuPages.length - 1}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-xl text-[#fff4e3]/60 transition-all hover:border-[#ffb36b]/50 hover:text-[#ffb36b] disabled:opacity-20"
+              >
+                ›
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
@@ -219,6 +312,14 @@ const ambienceImages = [
   "/imagenes/ambiente-03.jpg",
   "/imagenes/ambiente-04.jpg",
   "/imagenes/ambiente-05.jpg",
+  "/imagenes/ambiente-06.jpeg",
+  "/imagenes/ambiente-7.jpeg",
+  "/imagenes/ambiente-8.jpeg",
+  "/imagenes/ambiente-9.jpeg",
+  "/imagenes/ambiente-10.jpeg",
+  "/imagenes/ambiente-11.jpeg",
+  "/imagenes/ambiente-12.jpeg",
+  "/imagenes/ambiente-13.jpeg",
   "/imagenes/ambiente-interior.jpg",
 ];
 

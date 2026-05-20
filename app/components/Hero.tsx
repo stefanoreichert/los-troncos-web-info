@@ -72,20 +72,24 @@ export default function Hero() {
       cx.drawImage(src, 0, 0, srcW, srcH, dx, dy, dw, dh);
     }
 
-    // ─── Logo overlay (screen blend — visible en zonas oscuras, se oculta detrás del brillo de la hamburguesa) ─
+    // ─── Logo overlay (source-over, siempre visible sobre la imagen) ─────────
     function drawLogoOverlay() {
       const p = getProgress();
-      const alpha = 0.10 + p * 0.22; // 0.10 → 0.32 a medida que se scrollea
+      const alpha = Math.max(0.02, 0.52 - p * 0.52); // sutil al inicio, desaparece al scrollear
       const fontSize = Math.max(28, Math.round(vpW * 0.13));
       const subSize = Math.max(8, Math.round(fontSize * 0.085));
       cx.save();
-      cx.globalCompositeOperation = "screen";
+      cx.globalCompositeOperation = "source-over";
       cx.textAlign = "center";
       cx.textBaseline = "middle";
+      // Sombra sutil para dar profundidad
+      cx.shadowColor = "rgba(0,0,0,0.7)";
+      cx.shadowBlur = fontSize * 0.4;
       cx.fillStyle = `rgba(255, 179, 107, ${alpha})`;
       cx.font = `bold ${fontSize}px "Playfair Display", Georgia, serif`;
       cx.fillText("LOS TRONCOS", vpW / 2, vpH / 2);
-      cx.fillStyle = `rgba(255, 179, 107, ${alpha * 0.52})`;
+      cx.shadowBlur = subSize * 2;
+      cx.fillStyle = `rgba(255, 179, 107, ${alpha * 0.65})`;
       cx.font = `bold ${subSize}px Arial, sans-serif`;
       cx.fillText("R E S T O   B A R", vpW / 2, vpH / 2 + fontSize * 0.80);
       cx.restore();
@@ -236,7 +240,7 @@ export default function Hero() {
     <section
       id="inicio"
       ref={sectionRef}
-      className="relative h-[300vh] bg-[#050403]"
+      className="relative h-[220vh] bg-[#050403]"
       aria-label="Animacion cinematografica de hamburguesa Los Troncos"
     >
       {/* ── Sticky viewport ──────────────────────────────────────────── */}
