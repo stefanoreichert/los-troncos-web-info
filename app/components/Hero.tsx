@@ -67,12 +67,30 @@ export default function Hero() {
       cx.drawImage(src, sx, sy, sw, sh, 0, 0, vpW, vpH);
     }
 
+    // ─── Logo overlay (screen blend — visible en zonas oscuras, se oculta detrás del brillo de la hamburguesa) ─
+    function drawLogoOverlay() {
+      const p = getProgress();
+      const alpha = 0.10 + p * 0.22; // 0.10 → 0.32 a medida que se scrollea
+      const fontSize = Math.max(28, Math.round(vpW * 0.13));
+      const subSize = Math.max(8, Math.round(fontSize * 0.085));
+      cx.save();
+      cx.globalCompositeOperation = "screen";
+      cx.textAlign = "center";
+      cx.textBaseline = "middle";
+      cx.fillStyle = `rgba(255, 179, 107, ${alpha})`;
+      cx.font = `bold ${fontSize}px "Playfair Display", Georgia, serif`;
+      cx.fillText("LOS TRONCOS", vpW / 2, vpH / 2);
+      cx.fillStyle = `rgba(255, 179, 107, ${alpha * 0.52})`;
+      cx.font = `bold ${subSize}px Arial, sans-serif`;
+      cx.fillText("R E S T O   B A R", vpW / 2, vpH / 2 + fontSize * 0.80);
+      cx.restore();
+    }
+
     // ─── Frame-mode draw ──────────────────────────────────────────────────
     function drawFrame(idx: number) {
-      if (idx === currentIdx) return;
       currentIdx = idx;
       const f = framesRef.current[idx];
-      if (f?.naturalWidth) drawCover(f);
+      if (f?.naturalWidth) { drawCover(f); drawLogoOverlay(); }
     }
 
     function updateMetrics() {
@@ -87,7 +105,7 @@ export default function Hero() {
 
     // ─── Video-mode: rAF loop ─────────────────────────────────────────────
     function videoLoop() {
-      if (videoReady) drawCover(video!);
+      if (videoReady) { drawCover(video!); drawLogoOverlay(); }
       rafId = requestAnimationFrame(videoLoop);
     }
 

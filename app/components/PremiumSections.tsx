@@ -172,11 +172,15 @@ export function SpecialtiesSection() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {specialties.map((item) => (
+          {specialties.map((item, i) => (
             <article
               key={item.name}
-              className="group relative overflow-hidden rounded-[34px] border border-white/10 bg-[#100b08] shadow-[0_34px_110px_rgba(0,0,0,0.34)]"
+              className="group relative overflow-hidden rounded-[34px] border border-white/10 bg-[#100b08] shadow-[0_34px_110px_rgba(0,0,0,0.34)] transition-all duration-500 hover:border-[#ffb36b]/25 hover:shadow-[0_40px_120px_rgba(240,138,60,0.16)]"
             >
+              {/* Number badge */}
+              <span className="pointer-events-none absolute right-6 top-5 z-10 select-none font-[family-name:var(--font-playfair)] text-[88px] font-bold leading-none text-white/[0.052] transition-all duration-700 group-hover:text-[#ffb36b]/10">
+                {String(i + 1).padStart(2, "0")}
+              </span>
               <div className="relative h-[430px] overflow-hidden">
                 <Image
                   src={item.image}
@@ -185,13 +189,19 @@ export function SpecialtiesSection() {
                   sizes="(max-width: 1024px) 100vw, 33vw"
                   className="object-cover transition-transform duration-1000 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050403] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050403] via-[#050403]/20 to-transparent" />
+                {/* Warm hover tint */}
+                <div className="absolute inset-0 bg-[#f08a3c]/0 transition-colors duration-700 group-hover:bg-[#f08a3c]/[0.07]" />
+                {/* Top shine */}
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,179,107,0.07),transparent_50%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               </div>
               <div className="absolute inset-x-0 bottom-0 p-6">
+                {/* Animated amber line */}
+                <div className="mb-3 h-px w-8 bg-gradient-to-r from-[#ffb36b] to-transparent transition-all duration-500 group-hover:w-20" />
                 <h3 className="font-[family-name:var(--font-playfair)] text-3xl text-[#fff8ee]">
                   {item.name}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-[#fff4e3]/58">
+                <p className="mt-3 text-sm leading-7 text-[#fff4e3]/58 transition-colors duration-500 group-hover:text-[#fff4e3]/80">
                   {item.desc}
                 </p>
               </div>
@@ -224,7 +234,7 @@ export function AmbienceSection() {
           {ambienceImages.map((image, index) => (
             <div
               key={image}
-              className="group mb-5 break-inside-avoid overflow-hidden rounded-[30px] border border-white/10 bg-[#100b08]"
+              className="group mb-5 break-inside-avoid overflow-hidden rounded-[30px] border border-white/10 bg-[#100b08] transition-all duration-500 hover:border-[#ffb36b]/30 hover:shadow-[0_20px_60px_rgba(240,138,60,0.12)]"
             >
               <div
                 className={`relative ${
@@ -238,7 +248,11 @@ export function AmbienceSection() {
                   sizes="(max-width: 1024px) 100vw, 33vw"
                   className="object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#050403]/56 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050403]/56 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-15" />
+                {/* Warm shine on hover */}
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,179,107,0.09),transparent_55%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                {/* Bottom amber micro-line */}
+                <div className="absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 bg-gradient-to-r from-[#ffb36b]/60 via-[#f08a3c]/40 to-transparent transition-transform duration-500 group-hover:scale-x-100" />
               </div>
             </div>
           ))}
