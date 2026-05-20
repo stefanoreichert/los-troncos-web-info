@@ -70,13 +70,23 @@ export default function Hero() {
       cx.fillStyle = "#050403";
       cx.fillRect(0, 0, vpW, vpH);
       cx.drawImage(src, 0, 0, srcW, srcH, dx, dy, dw, dh);
+
+      // Tapa marca de agua — esquina inferior derecha de la imagen
+      const wmW = dw * 0.22;
+      const wmH = dh * 0.10;
+      const grad = cx.createLinearGradient(dx + dw - wmW, dy + dh - wmH, dx + dw, dy + dh);
+      grad.addColorStop(0, "rgba(5,4,3,0)");
+      grad.addColorStop(0.45, "rgba(5,4,3,0.85)");
+      grad.addColorStop(1, "rgba(5,4,3,1)");
+      cx.fillStyle = grad;
+      cx.fillRect(dx + dw - wmW, dy + dh - wmH, wmW, wmH);
     }
 
     // ─── Logo overlay (source-over, siempre visible sobre la imagen) ─────────
     function drawLogoOverlay() {
       const p = getProgress();
       const alpha = Math.max(0.02, 0.52 - p * 0.52); // sutil al inicio, desaparece al scrollear
-      const fontSize = Math.max(28, Math.round(vpW * 0.13));
+      const fontSize = Math.max(22, Math.round(vpW * 0.07));
       const subSize = Math.max(8, Math.round(fontSize * 0.085));
       cx.save();
       cx.globalCompositeOperation = "source-over";
@@ -267,6 +277,8 @@ export default function Hero() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_40%,transparent_30%,rgba(5,4,3,0.55)_70%,rgba(5,4,3,0.92)_100%)]" />
         {/* Bottom fade into next section */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#050403] to-transparent" />
+        {/* Cubre marca de agua — esquina inferior derecha */}
+        <div className="pointer-events-none absolute bottom-0 right-0 h-28 w-72 bg-gradient-to-tl from-[#050403] via-[#050403]/90 to-transparent" />
         {/* Top fade (for navbar) */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#050403]/60 to-transparent" />
 

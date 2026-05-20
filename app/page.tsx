@@ -6,7 +6,6 @@ import {
   ContactSection,
   MenuImageSection,
   ReservationSection,
-  SpecialtiesSection,
 } from "./components/PremiumSections";
 import Footer from "./components/Footer";
 import WhatsAppButton from "./components/WhatsAppButton";
@@ -18,7 +17,6 @@ export default function Home() {
       <Hero />
       <MenuImageSection />
       <AboutSection />
-      <SpecialtiesSection />
       <AmbienceSection />
       <ContactSection />
       <ReservationSection />
