@@ -51,20 +51,25 @@ export default function Hero() {
       cx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    // ─── Cover draw (works with img or video) ─────────────────────────────
+    // ─── Contain draw (imagen completa con su fondo, centrada) ───────────────
     function drawCover(src: HTMLImageElement | HTMLVideoElement) {
       const srcW = src instanceof HTMLVideoElement ? src.videoWidth : src.naturalWidth;
       const srcH = src instanceof HTMLVideoElement ? src.videoHeight : src.naturalHeight;
       if (!srcW || !srcH) return;
 
+      // contain: escala para que quepa completa, centrada
       const ia = srcW / srcH;
       const ca = vpW / vpH;
-      let sx = 0, sy = 0, sw = srcW, sh = srcH;
-      if (ca > ia) { sh = srcW / ca; sy = (srcH - sh) / 2; }
-      else          { sw = srcH * ca; sx = (srcW - sw) / 2; }
+      let dw, dh;
+      if (ia > ca) { dw = vpW; dh = vpW / ia; }
+      else          { dh = vpH; dw = vpH * ia; }
+      const dx = (vpW - dw) / 2;
+      const dy = (vpH - dh) / 2;
 
       cx.clearRect(0, 0, vpW, vpH);
-      cx.drawImage(src, sx, sy, sw, sh, 0, 0, vpW, vpH);
+      cx.fillStyle = "#050403";
+      cx.fillRect(0, 0, vpW, vpH);
+      cx.drawImage(src, 0, 0, srcW, srcH, dx, dy, dw, dh);
     }
 
     // ─── Logo overlay (screen blend — visible en zonas oscuras, se oculta detrás del brillo de la hamburguesa) ─
@@ -231,7 +236,7 @@ export default function Hero() {
     <section
       id="inicio"
       ref={sectionRef}
-      className="relative h-[600vh] bg-[#050403]"
+      className="relative h-[300vh] bg-[#050403]"
       aria-label="Animacion cinematografica de hamburguesa Los Troncos"
     >
       {/* ── Sticky viewport ──────────────────────────────────────────── */}
