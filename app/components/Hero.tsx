@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, CalendarDays } from "lucide-react";
 
 const FRAME_COUNT = 180;
@@ -44,6 +44,7 @@ export default function Hero() {
   const loadedFramesRef = useRef(0);
   const currentFrameRef = useRef(-1);
   const progressRef = useRef(0);
+  const [framesReady, setFramesReady] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -132,7 +133,10 @@ export default function Hero() {
       image.src = frameUrl(index);
       image.onload = () => {
         loadedFramesRef.current += 1;
-        if (loadedFramesRef.current === 1) render(true);
+        if (loadedFramesRef.current === 1) {
+          setFramesReady(true);
+          render(true);
+        }
       };
       return image;
     });
@@ -159,39 +163,45 @@ export default function Hero() {
     <section
       id="inicio"
       ref={sectionRef}
-      className="relative h-[540vh] bg-[#050403]"
+      className="relative h-[320vh] bg-[#050403]"
       aria-label="Hamburguesa cinematografica Los Troncos"
     >
       <div className="sticky top-0 h-screen overflow-hidden">
-        <canvas
-          ref={canvasRef}
-          className="absolute inset-0 h-full w-full bg-[#050403]"
-        />
         <video
           ref={videoRef}
           src="/imagenes/hamburguesa.mp4"
           muted
+          autoPlay
+          loop
           playsInline
           preload="auto"
-          className="hidden"
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+            framesReady ? "opacity-0" : "opacity-100"
+          }`}
+        />
+        <canvas
+          ref={canvasRef}
+          className={`absolute inset-0 h-full w-full bg-transparent transition-opacity duration-700 ${
+            framesReady ? "opacity-100" : "opacity-0"
+          }`}
         />
 
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(5,4,3,0.08)_28%,rgba(5,4,3,0.82)_78%),linear-gradient(180deg,rgba(5,4,3,0.35)_0%,rgba(5,4,3,0.05)_38%,rgba(5,4,3,0.92)_100%)]" />
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,4,3,0.86),transparent_38%,transparent_62%,rgba(5,4,3,0.76))]" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050403] to-transparent" />
 
-        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-20 pt-28 sm:px-8 lg:pb-24">
-          <div className="max-w-4xl">
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8 lg:pb-24">
+          <div className="max-w-3xl">
             <p className="mb-5 inline-flex rounded-full border border-[#ffb36b]/20 bg-[#100b08]/42 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#ffb36b] backdrop-blur-xl sm:text-xs">
               Los Troncos Signature Burger
             </p>
-            <h1 className="font-[family-name:var(--font-playfair)] text-[clamp(3.4rem,11vw,9rem)] font-semibold leading-[0.84] text-[#fff8ee] drop-shadow-[0_24px_80px_rgba(0,0,0,0.72)]">
+            <h1 className="font-[family-name:var(--font-playfair)] text-[clamp(3.1rem,9vw,7.4rem)] font-semibold leading-[0.88] text-[#fff8ee] drop-shadow-[0_24px_80px_rgba(0,0,0,0.72)]">
               La hamburguesa que redefine el sabor
             </h1>
             <p className="mt-7 max-w-2xl text-base leading-8 text-[#fff4e3]/72 sm:text-lg md:text-xl">
-              Una experiencia visual y gastronomica intensa: fuego, textura,
-              ingredientes suspendidos y sabor de resto bar elevado a otro
-              nivel.
+              Carne jugosa, queso fundido, pan dorado y el caracter nocturno
+              de Los Troncos en una experiencia pensada para antojar desde el
+              primer segundo.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -215,15 +225,15 @@ export default function Hero() {
             </div>
           </div>
 
-          <div className="mt-12 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
-            {["Canvas fullscreen", "Scroll frame-by-frame", "Burger cinematic"].map(
+          <div className="mt-10 flex max-w-2xl flex-wrap gap-3">
+            {["Hecha al momento", "Sabores intensos", "Reservas por WhatsApp"].map(
               (item) => (
-                <div
+                <span
                   key={item}
-                  className="rounded-2xl border border-[#fff4e3]/8 bg-[#100b08]/34 px-4 py-3 text-center text-[10px] uppercase tracking-[0.18em] text-[#fff4e3]/48 backdrop-blur-xl"
+                  className="rounded-full border border-[#fff4e3]/10 bg-[#100b08]/34 px-4 py-2 text-[10px] uppercase tracking-[0.18em] text-[#fff4e3]/58 backdrop-blur-xl"
                 >
                   {item}
-                </div>
+                </span>
               )
             )}
           </div>

@@ -67,33 +67,43 @@ export function MenuImageSection() {
         <div className="mb-12 max-w-3xl">
           <p className={sectionLabel}>Menu</p>
           <h2 className={sectionTitle}>
-            La carta, presentada como pieza visual.
+            Carta visual, simple y elegante.
           </h2>
           <p className="mt-6 max-w-2xl text-base leading-8 text-[#fff4e3]/58">
-            Esta seccion esta preparada para cargar imagenes reales del menu,
-            limpias, centradas y legibles.
+            Un espacio preparado para mostrar las imagenes reales del menu con
+            buena lectura, sombra suave y foco total en la carta.
           </p>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          {[1, 2].map((item) => (
+          {[
+            {
+              title: "Carta principal",
+              subtitle: "Platos, pizzas, hamburguesas y especialidades",
+            },
+            {
+              title: "Bebidas y tragos",
+              subtitle: "Bar, cocteles, cervezas y opciones para compartir",
+            },
+          ].map((item) => (
             <div
-              key={item}
-              className="group relative min-h-[520px] overflow-hidden rounded-[34px] border border-white/10 bg-[#0d0907] p-4 shadow-[0_34px_110px_rgba(0,0,0,0.38)] sm:min-h-[640px] sm:p-6"
+              key={item.title}
+              className="group relative min-h-[440px] overflow-hidden rounded-[34px] border border-white/10 bg-[#0d0907] p-4 shadow-[0_34px_110px_rgba(0,0,0,0.38)] sm:min-h-[560px] sm:p-6"
             >
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,179,107,0.18),transparent_34%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_32%)] opacity-80" />
-              <div className="relative flex h-full min-h-[488px] items-center justify-center rounded-[26px] border border-dashed border-[#fff4e3]/18 bg-[#fff4e3]/[0.025] p-8 text-center transition-transform duration-700 group-hover:scale-[1.015] sm:min-h-[592px]">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.32em] text-[#ffb36b]">
-                    Imagen del menu {item}
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(255,179,107,0.18),transparent_32%),linear-gradient(135deg,rgba(255,255,255,0.08),transparent_35%)] opacity-80" />
+              <div className="relative flex h-full min-h-[408px] items-center justify-center overflow-hidden rounded-[26px] border border-[#fff4e3]/12 bg-[#f3e4cf] p-5 text-center transition-transform duration-700 group-hover:scale-[1.015] sm:min-h-[512px] sm:p-8">
+                <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(230,207,178,0.82)),radial-gradient(circle_at_30%_20%,rgba(240,138,60,0.22),transparent_35%)]" />
+                <div className="relative flex h-full w-full flex-col items-center justify-center rounded-[22px] border border-[#2b170d]/10 bg-white/44 px-6 py-12 shadow-[inset_0_0_80px_rgba(43,23,13,0.08)]">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.32em] text-[#8b3e1f]">
+                    Los Troncos Resto Bar
                   </p>
-                  <p className="mt-4 font-[family-name:var(--font-playfair)] text-4xl text-[#fff8ee]/85">
-                    Reemplazar por carta real
+                  <p className="mt-5 font-[family-name:var(--font-playfair)] text-5xl text-[#1b100b] sm:text-6xl">
+                    {item.title}
                   </p>
-                  <p className="mx-auto mt-4 max-w-sm text-sm leading-7 text-[#fff4e3]/42">
-                    Inserta aqui la imagen exacta del menu para mantener
-                    legibilidad y una presentacion premium.
+                  <p className="mx-auto mt-5 max-w-sm text-sm leading-7 text-[#1b100b]/58">
+                    {item.subtitle}
                   </p>
+                  <div className="mt-10 h-px w-28 bg-gradient-to-r from-transparent via-[#8b3e1f]/45 to-transparent" />
                 </div>
               </div>
             </div>
@@ -158,7 +168,7 @@ export function SpecialtiesSection() {
       <Reveal className="relative mx-auto max-w-7xl">
         <div className="mb-12 max-w-4xl">
           <p className={sectionLabel}>Nuestras Especialidades</p>
-          <h2 className={sectionTitle}>Platos con presencia de publicidad.</h2>
+          <h2 className={sectionTitle}>Especialidades de la casa.</h2>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
