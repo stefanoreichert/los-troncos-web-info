@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const TOTAL_FRAMES = 192;
+const TOTAL_FRAMES = 61;
 const FRAMES_DIR = "/frames/hamburguesa/";
 const pad = (n: number) => String(n).padStart(4, "0");
 
