@@ -76,7 +76,8 @@ export default function Hero() {
     }
 
     function updateMetrics() {
-      sectionTop = sec.offsetTop;
+      const rect = sec.getBoundingClientRect();
+      sectionTop = rect.top + window.scrollY;
       scrollRange = Math.max(1, sec.offsetHeight - window.innerHeight);
     }
 
@@ -104,6 +105,7 @@ export default function Hero() {
 
     // ─── Scroll handler ───────────────────────────────────────────────────
     function onScroll() {
+      updateMetrics();
       const p = getProgress();
 
       if (useVideoMode && video) {

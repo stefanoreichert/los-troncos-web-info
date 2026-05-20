@@ -16,6 +16,7 @@ html {
 }
 
 body {
+  overflow-x: clip; /* clip sin crear scroll-container, no rompe position:sticky */
   background:
     radial-gradient(circle at top, rgba(212, 98, 42, 0.08), transparent 34rem),
     #050403;

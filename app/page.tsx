@@ -13,7 +13,7 @@ import WhatsAppButton from "./components/WhatsAppButton";
 
 export default function Home() {
   return (
-    <main className="relative overflow-hidden bg-[#050403]">
+    <main className="relative bg-[#050403]">
       <Navbar />
       <Hero />
       <MenuImageSection />
