@@ -23,8 +23,10 @@ const FacebookIcon = () => (
 const navLinks = [
   ["#inicio", "Inicio"],
   ["#menu", "Menu"],
-  ["#galeria", "Galeria"],
-  ["#reservas", "Reservas"],
+  ["#nosotros", "Nosotros"],
+  ["#especialidades", "Especialidades"],
+  ["#ambiente", "Ambiente"],
+  ["#reservar", "Reservar"],
   ["#contacto", "Contacto"],
 ];
 

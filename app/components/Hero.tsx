@@ -1,20 +1,155 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
-import { ArrowRight, CalendarDays, ChevronDown } from "lucide-react";
+import { useEffect, useRef } from "react";
+import { ArrowRight, CalendarDays } from "lucide-react";
+
+const FRAME_COUNT = 180;
+const FRAME_PATH = "/frames/hamburguesa/frame_";
+const FRAME_EXTENSION = ".webp";
+
+function clamp(value: number, min = 0, max = 1) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function frameUrl(index: number) {
+  return `${FRAME_PATH}${String(index + 1).padStart(4, "0")}${FRAME_EXTENSION}`;
+}
+
+function drawCover(
+  ctx: CanvasRenderingContext2D,
+  source: HTMLImageElement | HTMLVideoElement,
+  width: number,
+  height: number
+) {
+  const sourceWidth =
+    "videoWidth" in source ? source.videoWidth : source.width;
+  const sourceHeight =
+    "videoHeight" in source ? source.videoHeight : source.height;
+
+  if (!sourceWidth || !sourceHeight) return;
+
+  const scale = Math.max(width / sourceWidth, height / sourceHeight);
+  const x = (width - sourceWidth * scale) / 2;
+  const y = (height - sourceHeight * scale) / 2;
+
+  ctx.clearRect(0, 0, width, height);
+  ctx.drawImage(source, x, y, sourceWidth * scale, sourceHeight * scale);
+}
 
 export default function Hero() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
+  const sectionRef = useRef<HTMLElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const framesRef = useRef<HTMLImageElement[]>([]);
+  const loadedFramesRef = useRef(0);
+  const currentFrameRef = useRef(-1);
+  const progressRef = useRef(0);
 
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "24%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.78], [1, 0]);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const section = sectionRef.current;
+    if (!canvas || !section) return;
+
+    const ctx = canvas.getContext("2d", { alpha: false });
+    if (!ctx) return;
+
+    let width = 0;
+    let height = 0;
+    let raf = 0;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = Math.floor(window.innerWidth * dpr);
+      height = Math.floor(window.innerHeight * dpr);
+      canvas.width = width;
+      canvas.height = height;
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      render(true);
+    };
+
+    const render = (force = false) => {
+      const frameIndex = Math.min(
+        FRAME_COUNT - 1,
+        Math.floor(progressRef.current * (FRAME_COUNT - 1))
+      );
+
+      if (!force && frameIndex === currentFrameRef.current) return;
+      currentFrameRef.current = frameIndex;
+
+      const frame = framesRef.current[frameIndex];
+      if (frame?.complete && frame.naturalWidth > 0) {
+        drawCover(ctx, frame, width, height);
+        return;
+      }
+
+      const nearestFrame = framesRef.current.find(
+        (image) => image.complete && image.naturalWidth > 0
+      );
+
+      if (nearestFrame) {
+        drawCover(ctx, nearestFrame, width, height);
+        return;
+      }
+
+      const video = videoRef.current;
+      if (video && video.readyState >= 2) {
+        if (video.duration) {
+          const targetTime = progressRef.current * video.duration;
+          if (Math.abs(video.currentTime - targetTime) > 0.08) {
+            video.currentTime = targetTime;
+          }
+        }
+        drawCover(ctx, video, width, height);
+      } else {
+        const gradient = ctx.createRadialGradient(
+          width / 2,
+          height / 2,
+          0,
+          width / 2,
+          height / 2,
+          width / 1.2
+        );
+        gradient.addColorStop(0, "#2a1209");
+        gradient.addColorStop(0.45, "#100907");
+        gradient.addColorStop(1, "#050403");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+      }
+    };
+
+    const updateProgress = () => {
+      const rect = section.getBoundingClientRect();
+      const scrollable = rect.height - window.innerHeight;
+      progressRef.current = clamp(-rect.top / scrollable);
+      raf = requestAnimationFrame(() => render());
+    };
+
+    const frames = Array.from({ length: FRAME_COUNT }, (_, index) => {
+      const image = new Image();
+      image.decoding = "async";
+      image.src = frameUrl(index);
+      image.onload = () => {
+        loadedFramesRef.current += 1;
+        if (loadedFramesRef.current === 1) render(true);
+      };
+      return image;
+    });
+
+    framesRef.current = frames;
+    resize();
+    updateProgress();
+
+    window.addEventListener("resize", resize, { passive: true });
+    window.addEventListener("scroll", updateProgress, { passive: true });
+
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", updateProgress);
+    };
+  }, []);
 
   const scrollTo = (selector: string) => {
     document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
@@ -23,130 +158,81 @@ export default function Hero() {
   return (
     <section
       id="inicio"
-      ref={containerRef}
-      className="relative min-h-screen overflow-hidden bg-[#090706]"
+      ref={sectionRef}
+      className="relative h-[540vh] bg-[#050403]"
+      aria-label="Hamburguesa cinematografica Los Troncos"
     >
-      <motion.div style={{ y: imageY }} className="absolute inset-0 scale-110">
-        <Image
-          src="/imagenes/ambiente-05.jpg"
-          alt="Ambiente de Los Troncos Resto Bar"
-          fill
-          className="object-cover"
-          priority
-          sizes="100vw"
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <canvas
+          ref={canvasRef}
+          className="absolute inset-0 h-full w-full bg-[#050403]"
         />
-        <div className="absolute inset-0 z-10 bg-[#080604]/58" />
-        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_50%_36%,rgba(212,98,42,0.18),transparent_34%),linear-gradient(180deg,rgba(8,6,4,0.35)_0%,rgba(8,6,4,0.2)_38%,#090706_100%)]" />
-        <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(8,6,4,0.78)_0%,rgba(8,6,4,0.25)_52%,rgba(8,6,4,0.72)_100%)]" />
-      </motion.div>
-
-      <motion.div
-        style={{ y: textY, opacity }}
-        className="relative z-20 mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-5 pb-20 pt-32 text-center sm:px-6 lg:px-8"
-      >
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mb-5 rounded-full border border-[#d4622a]/30 bg-[#120d09]/45 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.32em] text-[#f1a35a] backdrop-blur-md sm:text-xs"
-        >
-          Puerto Rico · Misiones · Argentina
-        </motion.p>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 42 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          className="font-[family-name:var(--font-playfair)] text-[clamp(3.6rem,12vw,8.4rem)] font-semibold leading-[0.86] text-[#fff8ee] drop-shadow-[0_22px_55px_rgba(0,0,0,0.55)]"
-        >
-          Los Troncos
-          <span className="mt-3 block text-[clamp(2rem,6vw,5.5rem)] italic text-[#e78a45]">
-            Resto Bar
-          </span>
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 26 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.7 }}
-          className="mt-7 max-w-2xl text-base leading-8 text-[#fff4e3]/78 sm:text-lg md:text-xl"
-        >
-          Cocina generosa, tragos de autor y noches con ambiente calido en el
-          corazon de Puerto Rico, Misiones.
-        </motion.p>
-
-        <motion.div
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 1, delay: 0.85 }}
-          className="my-9 h-px w-28 bg-gradient-to-r from-transparent via-[#e78a45] to-transparent"
+        <video
+          ref={videoRef}
+          src="/imagenes/hamburguesa.mp4"
+          muted
+          playsInline
+          preload="auto"
+          className="hidden"
         />
 
-        <motion.div
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.95 }}
-          className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
-        >
-          <motion.button
-            whileHover={{ y: -2, backgroundColor: "#e78a45" }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => scrollTo("#reservas")}
-            className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#722f37] px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#fff8ee] shadow-[0_20px_55px_rgba(114,47,55,0.34)] transition-colors duration-300 sm:w-auto"
-          >
-            <CalendarDays size={17} />
-            Reservar Mesa
-          </motion.button>
-          <motion.button
-            whileHover={{ y: -2, borderColor: "#e78a45" }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => scrollTo("#menu")}
-            className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[#fff4e3]/30 bg-[#120d09]/35 px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#fff8ee] backdrop-blur-md transition-all duration-300 hover:bg-[#fff4e3]/8 sm:w-auto"
-          >
-            Ver Menu
-            <ArrowRight
-              size={17}
-              className="transition-transform duration-300 group-hover:translate-x-1"
-            />
-          </motion.button>
-        </motion.div>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(5,4,3,0.08)_28%,rgba(5,4,3,0.82)_78%),linear-gradient(180deg,rgba(5,4,3,0.35)_0%,rgba(5,4,3,0.05)_38%,rgba(5,4,3,0.92)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,4,3,0.86),transparent_38%,transparent_62%,rgba(5,4,3,0.76))]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050403] to-transparent" />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.1 }}
-          className="mt-10 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3"
-        >
-          {["Cocina artesanal", "Tragos y bar", "Reservas por WhatsApp"].map(
-            (item) => (
-              <div
-                key={item}
-                className="rounded-2xl border border-[#fff4e3]/10 bg-[#0c0907]/38 px-4 py-3 text-center text-xs uppercase tracking-[0.16em] text-[#fff4e3]/62 backdrop-blur-md"
+        <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-20 pt-28 sm:px-8 lg:pb-24">
+          <div className="max-w-4xl">
+            <p className="mb-5 inline-flex rounded-full border border-[#ffb36b]/20 bg-[#100b08]/42 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.32em] text-[#ffb36b] backdrop-blur-xl sm:text-xs">
+              Los Troncos Signature Burger
+            </p>
+            <h1 className="font-[family-name:var(--font-playfair)] text-[clamp(3.4rem,11vw,9rem)] font-semibold leading-[0.84] text-[#fff8ee] drop-shadow-[0_24px_80px_rgba(0,0,0,0.72)]">
+              La hamburguesa que redefine el sabor
+            </h1>
+            <p className="mt-7 max-w-2xl text-base leading-8 text-[#fff4e3]/72 sm:text-lg md:text-xl">
+              Una experiencia visual y gastronomica intensa: fuego, textura,
+              ingredientes suspendidos y sabor de resto bar elevado a otro
+              nivel.
+            </p>
+
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <button
+                onClick={() => scrollTo("#menu")}
+                className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-[#f08a3c] px-7 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#130a05] shadow-[0_22px_70px_rgba(240,138,60,0.28)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#ffb36b]"
               >
-                {item}
-              </div>
-            )
-          )}
-        </motion.div>
-      </motion.div>
+                Ver Menu
+                <ArrowRight
+                  size={18}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </button>
+              <button
+                onClick={() => scrollTo("#reservar")}
+                className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full border border-[#fff4e3]/18 bg-[#100b08]/38 px-7 py-4 text-xs font-bold uppercase tracking-[0.2em] text-[#fff8ee] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-[#ffb36b]/55 hover:bg-[#fff4e3]/8"
+              >
+                <CalendarDays size={18} />
+                Reservar Mesa
+              </button>
+            </div>
+          </div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.8, duration: 1 }}
-        className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-2"
-        onClick={() => scrollTo("#menu")}
-      >
-        <span className="text-[10px] uppercase tracking-[0.35em] text-[#fff4e3]/38">
-          Scroll
-        </span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
-        >
-          <ChevronDown className="text-[#e78a45]" size={20} />
-        </motion.div>
-      </motion.div>
+          <div className="mt-12 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
+            {["Canvas fullscreen", "Scroll frame-by-frame", "Burger cinematic"].map(
+              (item) => (
+                <div
+                  key={item}
+                  className="rounded-2xl border border-[#fff4e3]/8 bg-[#100b08]/34 px-4 py-3 text-center text-[10px] uppercase tracking-[0.18em] text-[#fff4e3]/48 backdrop-blur-xl"
+                >
+                  {item}
+                </div>
+              )
+            )}
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute bottom-7 left-1/2 z-20 h-16 w-px -translate-x-1/2 overflow-hidden rounded-full bg-[#fff4e3]/12">
+          <div className="h-1/2 w-full animate-[scrollLine_1.8s_ease-in-out_infinite] bg-[#ffb36b]" />
+        </div>
+      </div>
     </section>
   );
 }

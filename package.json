@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "frames:burger": "powershell -ExecutionPolicy Bypass -File scripts/extract-burger-frames.ps1"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

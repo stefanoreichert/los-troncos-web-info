@@ -12,12 +12,13 @@
 
 html {
   scroll-behavior: smooth;
+  background: #050403;
 }
 
 body {
   background:
     radial-gradient(circle at top, rgba(212, 98, 42, 0.08), transparent 34rem),
-    #090706;
+    #050403;
   color: #f5f0e8;
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   text-rendering: optimizeLegibility;
@@ -51,4 +52,31 @@ input,
 select,
 textarea {
   -webkit-tap-highlight-color: transparent;
+}
+
+@keyframes scrollLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
 }
