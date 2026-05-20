@@ -3,7 +3,7 @@ param(
   [string]$OutputDir = "public\frames\hamburguesa",
   [int]$Fps = 24,
   [int]$Width = 1920,
-  [int]$Quality = 78
+  [int]$Quality = 2
 )
 
 $ErrorActionPreference = "Stop"
@@ -18,15 +18,16 @@ if (-not (Test-Path $InputVideo)) {
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 
-$outputPattern = Join-Path $OutputDir "frame_%04d.webp"
+$outputPattern = Join-Path $OutputDir "frame_%04d.jpg"
 $scaleFilter = "fps=$Fps,scale=$($Width):-1:flags=lanczos"
 
 ffmpeg `
   -y `
   -i $InputVideo `
+  -an `
   -vf $scaleFilter `
-  -compression_level 6 `
-  -quality $Quality `
+  -c:v mjpeg `
+  -q:v $Quality `
   $outputPattern
 
 Write-Host "Frames exported to $OutputDir"

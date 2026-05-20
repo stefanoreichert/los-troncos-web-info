@@ -3,155 +3,163 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, CalendarDays } from "lucide-react";
 
-const FRAME_COUNT = 180;
-const FRAME_PATH = "/frames/hamburguesa/frame_";
-const FRAME_EXTENSION = ".webp";
-
-function clamp(value: number, min = 0, max = 1) {
-  return Math.min(Math.max(value, min), max);
-}
-
-function frameUrl(index: number) {
-  return `${FRAME_PATH}${String(index + 1).padStart(4, "0")}${FRAME_EXTENSION}`;
-}
-
-function drawCover(
-  ctx: CanvasRenderingContext2D,
-  source: HTMLImageElement | HTMLVideoElement,
-  width: number,
-  height: number
-) {
-  const sourceWidth =
-    "videoWidth" in source ? source.videoWidth : source.width;
-  const sourceHeight =
-    "videoHeight" in source ? source.videoHeight : source.height;
-
-  if (!sourceWidth || !sourceHeight) return;
-
-  const scale = Math.max(width / sourceWidth, height / sourceHeight);
-  const x = (width - sourceWidth * scale) / 2;
-  const y = (height - sourceHeight * scale) / 2;
-
-  ctx.clearRect(0, 0, width, height);
-  ctx.drawImage(source, x, y, sourceWidth * scale, sourceHeight * scale);
-}
+const TOTAL_FRAMES = 192;
+const NATIVE_W = 1920;
+const NATIVE_H = 1080;
+const FRAMES_DIR = "/frames/hamburguesa/";
+const pad = (value: number) => String(value).padStart(4, "0");
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
   const framesRef = useRef<HTMLImageElement[]>([]);
-  const loadedFramesRef = useRef(0);
-  const currentFrameRef = useRef(-1);
-  const progressRef = useRef(0);
-  const [framesReady, setFramesReady] = useState(false);
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [loaderHidden, setLoaderHidden] = useState(false);
+  const [framesAvailable, setFramesAvailable] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const section = sectionRef.current;
+    const hint = hintRef.current;
     if (!canvas || !section) return;
 
     const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) return;
+    const canvasEl = canvas;
+    const sectionEl = section;
+    const ctxEl = ctx;
 
-    let width = 0;
-    let height = 0;
-    let raf = 0;
+    let dpr = 1;
+    let vpW = 0;
+    let vpH = 0;
+    let sectionTop = 0;
+    let scrollRange = 1;
+    let currentIdx = -1;
+    let rafPending = false;
+    let nextIdx = 0;
+    let usableFrames = 0;
 
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = Math.floor(window.innerWidth * dpr);
-      height = Math.floor(window.innerHeight * dpr);
-      canvas.width = width;
-      canvas.height = height;
-      canvas.style.width = `${window.innerWidth}px`;
-      canvas.style.height = `${window.innerHeight}px`;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      render(true);
-    };
+    function sizeCanvas() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      vpW = window.innerWidth;
+      vpH = window.innerHeight;
+      canvasEl.style.width = `${vpW}px`;
+      canvasEl.style.height = `${vpH}px`;
+      canvasEl.width = Math.round(vpW * dpr);
+      canvasEl.height = Math.round(vpH * dpr);
+      ctxEl.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
 
-    const render = (force = false) => {
-      const frameIndex = Math.min(
-        FRAME_COUNT - 1,
-        Math.floor(progressRef.current * (FRAME_COUNT - 1))
-      );
+    function drawCover(img: HTMLImageElement) {
+      if (!img || !img.naturalWidth) return;
 
-      if (!force && frameIndex === currentFrameRef.current) return;
-      currentFrameRef.current = frameIndex;
+      const imgW = img.naturalWidth || NATIVE_W;
+      const imgH = img.naturalHeight || NATIVE_H;
+      const imgAspect = imgW / imgH;
+      const canvasAspect = vpW / vpH;
 
-      const frame = framesRef.current[frameIndex];
-      if (frame?.complete && frame.naturalWidth > 0) {
-        drawCover(ctx, frame, width, height);
-        return;
-      }
+      let srcX = 0;
+      let srcY = 0;
+      let srcW = imgW;
+      let srcH = imgH;
 
-      const nearestFrame = framesRef.current.find(
-        (image) => image.complete && image.naturalWidth > 0
-      );
-
-      if (nearestFrame) {
-        drawCover(ctx, nearestFrame, width, height);
-        return;
-      }
-
-      const video = videoRef.current;
-      if (video && video.readyState >= 2) {
-        if (video.duration) {
-          const targetTime = progressRef.current * video.duration;
-          if (Math.abs(video.currentTime - targetTime) > 0.08) {
-            video.currentTime = targetTime;
-          }
-        }
-        drawCover(ctx, video, width, height);
+      if (canvasAspect > imgAspect) {
+        srcH = imgW / canvasAspect;
+        srcY = (imgH - srcH) / 2;
       } else {
-        const gradient = ctx.createRadialGradient(
-          width / 2,
-          height / 2,
-          0,
-          width / 2,
-          height / 2,
-          width / 1.2
-        );
-        gradient.addColorStop(0, "#2a1209");
-        gradient.addColorStop(0.45, "#100907");
-        gradient.addColorStop(1, "#050403");
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, width, height);
+        srcW = imgH * canvasAspect;
+        srcX = (imgW - srcW) / 2;
       }
-    };
 
-    const updateProgress = () => {
-      const rect = section.getBoundingClientRect();
-      const scrollable = rect.height - window.innerHeight;
-      progressRef.current = clamp(-rect.top / scrollable);
-      raf = requestAnimationFrame(() => render());
-    };
+      ctxEl.clearRect(0, 0, vpW, vpH);
+      ctxEl.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, vpW, vpH);
+    }
 
-    const frames = Array.from({ length: FRAME_COUNT }, (_, index) => {
-      const image = new Image();
-      image.decoding = "async";
-      image.src = frameUrl(index);
-      image.onload = () => {
-        loadedFramesRef.current += 1;
-        if (loadedFramesRef.current === 1) {
-          setFramesReady(true);
-          render(true);
+    function draw(idx: number) {
+      if (idx === currentIdx) return;
+      currentIdx = idx;
+      const frame = framesRef.current[idx];
+      if (frame?.naturalWidth) drawCover(frame);
+    }
+
+    function updateMetrics() {
+      sectionTop = sectionEl.offsetTop;
+      scrollRange = Math.max(1, sectionEl.offsetHeight - window.innerHeight);
+    }
+
+    function onScroll() {
+      const scrolled = window.scrollY - sectionTop;
+      const progress = Math.max(0, Math.min(1, scrolled / scrollRange));
+      nextIdx = Math.min(TOTAL_FRAMES - 1, Math.floor(progress * TOTAL_FRAMES));
+
+      if (scrolled > 20) hint?.classList.add("opacity-0");
+
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(() => {
+          draw(nextIdx);
+          rafPending = false;
+        });
+      }
+    }
+
+    function preload() {
+      return new Promise<void>((resolve) => {
+        let loadedCount = 0;
+
+        for (let i = 0; i < TOTAL_FRAMES; i += 1) {
+          const img = new Image();
+
+          img.onload = () => {
+            usableFrames += 1;
+            loadedCount += 1;
+            setLoadProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
+            if (loadedCount === TOTAL_FRAMES) resolve();
+          };
+
+          img.onerror = () => {
+            loadedCount += 1;
+            setLoadProgress(Math.round((loadedCount / TOTAL_FRAMES) * 100));
+            if (loadedCount === TOTAL_FRAMES) resolve();
+          };
+
+          img.src = `${FRAMES_DIR}frame_${pad(i + 1)}.jpg`;
+          framesRef.current[i] = img;
         }
-      };
-      return image;
+      });
+    }
+
+    sizeCanvas();
+
+    preload().then(() => {
+      updateMetrics();
+
+      if (usableFrames > 0) {
+        setFramesAvailable(true);
+        currentIdx = -1;
+        draw(0);
+        onScroll();
+        window.addEventListener("scroll", onScroll, { passive: true });
+      }
+
+      setLoaderHidden(true);
     });
 
-    framesRef.current = frames;
-    resize();
-    updateProgress();
+    const onResize = () => {
+      sizeCanvas();
+      updateMetrics();
+      const saved = currentIdx < 0 ? 0 : currentIdx;
+      currentIdx = -1;
+      if (usableFrames > 0) draw(saved);
+    };
 
-    window.addEventListener("resize", resize, { passive: true });
-    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
 
     return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("scroll", onScroll);
     };
   }, []);
 
@@ -163,10 +171,10 @@ export default function Hero() {
     <section
       id="inicio"
       ref={sectionRef}
-      className="relative h-[320vh] bg-[#050403]"
-      aria-label="Hamburguesa cinematografica Los Troncos"
+      className="relative h-[600vh] bg-[#050403]"
+      aria-label="Animacion cinematografica de hamburguesa Los Troncos"
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="sticky top-0 h-screen w-screen overflow-hidden">
         <video
           ref={videoRef}
           src="/imagenes/hamburguesa.mp4"
@@ -176,19 +184,39 @@ export default function Hero() {
           playsInline
           preload="auto"
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-            framesReady ? "opacity-0" : "opacity-100"
+            framesAvailable ? "opacity-0" : "opacity-100"
           }`}
         />
         <canvas
           ref={canvasRef}
-          className={`absolute inset-0 h-full w-full bg-transparent transition-opacity duration-700 ${
-            framesReady ? "opacity-100" : "opacity-0"
+          className={`absolute left-0 top-0 h-full w-full transition-opacity duration-700 ${
+            framesAvailable ? "opacity-100" : "opacity-0"
           }`}
         />
 
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(5,4,3,0.08)_28%,rgba(5,4,3,0.82)_78%),linear-gradient(180deg,rgba(5,4,3,0.35)_0%,rgba(5,4,3,0.05)_38%,rgba(5,4,3,0.92)_100%)]" />
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,4,3,0.86),transparent_38%,transparent_62%,rgba(5,4,3,0.76))]" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-[#050403] to-transparent" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,transparent_0%,rgba(5,4,3,0.12)_30%,rgba(5,4,3,0.86)_82%),linear-gradient(180deg,rgba(5,4,3,0.32)_0%,rgba(5,4,3,0.04)_44%,rgba(5,4,3,0.92)_100%)]" />
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(5,4,3,0.88),rgba(5,4,3,0.2)_34%,transparent_58%,rgba(5,4,3,0.78))]" />
+
+        <div
+          className={`fixed inset-0 z-[70] flex items-center justify-center bg-[#050403] transition-opacity duration-700 ${
+            loaderHidden ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
+        >
+          <div className="w-[min(420px,80vw)] text-center">
+            <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.34em] text-[#ffb36b]">
+              Cargando experiencia
+            </p>
+            <div className="h-1 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-[#ffb36b] transition-all duration-200"
+                style={{ width: `${loadProgress}%` }}
+              />
+            </div>
+            <p className="mt-4 text-xs font-semibold tracking-[0.22em] text-[#fff4e3]/60">
+              {loadProgress}%
+            </p>
+          </div>
+        </div>
 
         <div className="relative z-10 mx-auto flex h-full max-w-7xl flex-col justify-end px-5 pb-16 pt-28 sm:px-8 lg:pb-24">
           <div className="max-w-3xl">
@@ -224,22 +252,12 @@ export default function Hero() {
               </button>
             </div>
           </div>
-
-          <div className="mt-10 flex max-w-2xl flex-wrap gap-3">
-            {["Hecha al momento", "Sabores intensos", "Reservas por WhatsApp"].map(
-              (item) => (
-                <span
-                  key={item}
-                  className="rounded-full border border-[#fff4e3]/10 bg-[#100b08]/34 px-4 py-2 text-[10px] uppercase tracking-[0.18em] text-[#fff4e3]/58 backdrop-blur-xl"
-                >
-                  {item}
-                </span>
-              )
-            )}
-          </div>
         </div>
 
-        <div className="pointer-events-none absolute bottom-7 left-1/2 z-20 h-16 w-px -translate-x-1/2 overflow-hidden rounded-full bg-[#fff4e3]/12">
+        <div
+          ref={hintRef}
+          className="pointer-events-none absolute bottom-7 left-1/2 z-20 h-16 w-px -translate-x-1/2 overflow-hidden rounded-full bg-[#fff4e3]/12 transition-opacity duration-500"
+        >
           <div className="h-1/2 w-full animate-[scrollLine_1.8s_ease-in-out_infinite] bg-[#ffb36b]" />
         </div>
       </div>
