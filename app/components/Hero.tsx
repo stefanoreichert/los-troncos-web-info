@@ -71,37 +71,46 @@ export default function Hero() {
       cx.fillRect(0, 0, vpW, vpH);
       cx.drawImage(src, 0, 0, srcW, srcH, dx, dy, dw, dh);
 
-      // Tapa marca de agua — esquina inferior derecha de la imagen
-      const wmW = dw * 0.22;
-      const wmH = dh * 0.10;
-      const grad = cx.createLinearGradient(dx + dw - wmW, dy + dh - wmH, dx + dw, dy + dh);
-      grad.addColorStop(0, "rgba(5,4,3,0)");
-      grad.addColorStop(0.45, "rgba(5,4,3,0.85)");
-      grad.addColorStop(1, "rgba(5,4,3,1)");
-      cx.fillStyle = grad;
-      cx.fillRect(dx + dw - wmW, dy + dh - wmH, wmW, wmH);
+      // ── Fundido de bordes: la imagen se disuelve en el fondo ──────────────
+      const fade = Math.min(dw, dh) * 0.28;
+      const bg0 = "rgba(5,4,3,0)";
+      const bg1 = "rgba(5,4,3,1)";
+
+      // Izquierda
+      const gL = cx.createLinearGradient(dx, 0, dx + fade, 0);
+      gL.addColorStop(0, bg1); gL.addColorStop(1, bg0);
+      cx.fillStyle = gL; cx.fillRect(dx, dy, fade, dh);
+
+      // Derecha
+      const gR = cx.createLinearGradient(dx + dw - fade, 0, dx + dw, 0);
+      gR.addColorStop(0, bg0); gR.addColorStop(1, bg1);
+      cx.fillStyle = gR; cx.fillRect(dx + dw - fade, dy, fade, dh);
+
+      // Arriba
+      const gT = cx.createLinearGradient(0, dy, 0, dy + fade);
+      gT.addColorStop(0, bg1); gT.addColorStop(1, bg0);
+      cx.fillStyle = gT; cx.fillRect(dx, dy, dw, fade);
+
+      // Abajo (incluye la marca de agua)
+      const gB = cx.createLinearGradient(0, dy + dh - fade, 0, dy + dh);
+      gB.addColorStop(0, bg0); gB.addColorStop(1, bg1);
+      cx.fillStyle = gB; cx.fillRect(dx, dy + dh - fade, dw, fade);
     }
 
     // ─── Logo overlay (source-over, siempre visible sobre la imagen) ─────────
     function drawLogoOverlay() {
       const p = getProgress();
       const alpha = Math.max(0.02, 0.52 - p * 0.52); // sutil al inicio, desaparece al scrollear
-      const fontSize = Math.max(22, Math.round(vpW * 0.07));
-      const subSize = Math.max(8, Math.round(fontSize * 0.085));
+      const fontSize = Math.max(16, Math.round(vpW * 0.048));
       cx.save();
       cx.globalCompositeOperation = "source-over";
       cx.textAlign = "center";
       cx.textBaseline = "middle";
-      // Sombra sutil para dar profundidad
       cx.shadowColor = "rgba(0,0,0,0.7)";
       cx.shadowBlur = fontSize * 0.4;
       cx.fillStyle = `rgba(255, 179, 107, ${alpha})`;
       cx.font = `bold ${fontSize}px "Playfair Display", Georgia, serif`;
-      cx.fillText("LOS TRONCOS", vpW / 2, vpH / 2);
-      cx.shadowBlur = subSize * 2;
-      cx.fillStyle = `rgba(255, 179, 107, ${alpha * 0.65})`;
-      cx.font = `bold ${subSize}px Arial, sans-serif`;
-      cx.fillText("R E S T O   B A R", vpW / 2, vpH / 2 + fontSize * 0.80);
+      cx.fillText("LOS TRONCOS RESTO BAR", vpW / 2, vpH / 2);
       cx.restore();
     }
 
@@ -303,11 +312,8 @@ export default function Hero() {
           loaderHidden ? "pointer-events-none opacity-0" : "opacity-100"
         }`}
       >
-        <p className="font-[family-name:var(--font-playfair)] text-[28px] font-semibold tracking-wide text-[#fff8ee]">
-          Los Troncos
-        </p>
-        <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.46em] text-[#ffb36b]/80">
-          Resto Bar
+        <p className="font-[family-name:var(--font-playfair)] text-[26px] font-semibold tracking-wide text-[#fff8ee]">
+          Los Troncos Resto Bar
         </p>
         <div className="mt-10 h-px w-[min(320px,70vw)] overflow-hidden bg-white/[0.08]">
           <div
