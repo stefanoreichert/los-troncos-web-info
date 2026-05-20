@@ -17,7 +17,7 @@ export default function WhatsAppButton() {
       transition={{ delay: 2.2, type: "spring", stiffness: 200, damping: 18 }}
       whileHover={{ scale: 1.08 }}
       whileTap={{ scale: 0.95 }}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#25D366] hover:bg-[#1da851] text-white pl-4 pr-5 py-3.5 rounded-full shadow-xl shadow-[#25D366]/25 transition-colors duration-300"
+      className="fixed bottom-5 right-5 z-50 flex min-h-14 items-center gap-3 rounded-full bg-[#25D366] py-3.5 pl-4 pr-4 text-white shadow-xl shadow-[#25D366]/25 transition-colors duration-300 hover:bg-[#1da851] sm:bottom-6 sm:right-6 sm:pr-5"
       aria-label="Reservar por WhatsApp"
     >
       {/* Pulse ring */}

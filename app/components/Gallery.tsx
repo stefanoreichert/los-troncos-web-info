@@ -6,13 +6,13 @@ import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
 const galleryImages = [
-  { src: "/imagenes/pizza-palo-rosa.jpg", alt: "Pizza Palo Rosa — pizza insignia de Los Troncos con tomates cherry y pesto", category: "Pizzas" },
+  { src: "/imagenes/pizza-palorosa.jpg", alt: "Pizza Palo Rosa — pizza insignia de Los Troncos con tomates cherry y pesto", category: "Pizzas" },
   { src: "/imagenes/ambiente-interior.jpg", alt: "Interior elegante del salón de Los Troncos Resto Bar, Puerto Rico Misiones", category: "Ambiente" },
   { src: "/imagenes/milanesa-napolitana.jpg", alt: "Milanesa Napolitana con jamón, tomate fresco y queso gratinado", category: "Cocina" },
   { src: "/imagenes/pizza-kurupi.jpg", alt: "Pizza Kurupí con carne a cuchillo y cebolla caramelizada", category: "Pizzas" },
   { src: "/imagenes/hamburguesa-tacuarembo.jpg", alt: "Hamburguesa Tacuarembó con doble medallón, cheddar y bacon", category: "Cocina" },
   { src: "/imagenes/bife-chorizo.jpg", alt: "Bife de Chorizo con papas aplastadas y hierbas de la casa", category: "Carnes" },
-  { src: "/imagenes/pizza-aratigu.jpg", alt: "Pizza Araticú con provolone, jamón y morrones asados", category: "Pizzas" },
+  { src: "/imagenes/pizza-araticu.jpg", alt: "Pizza Araticú con provolone, jamón y morrones asados", category: "Pizzas" },
   { src: "/imagenes/ambiente-01.jpg", alt: "Ambiente nocturno de Los Troncos Resto Bar", category: "Ambiente" },
   { src: "/imagenes/milanesa-los-troncos.jpg", alt: "Milanesa Los Troncos con mozzarella, cheddar y panceta crocante", category: "Cocina" },
   { src: "/imagenes/empanadas-arabes.jpg", alt: "Empanadas Árabes con carne especiada, cebolla, morrón y limón", category: "Cocina" },
@@ -50,14 +50,14 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section id="galeria" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#0d0d0d]">
+    <section id="galeria" className="bg-[#090706] px-4 py-24 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div ref={titleRef} className="text-center mb-14">
+        <div ref={titleRef} className="mx-auto mb-14 max-w-2xl text-center">
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            className="text-[#d4622a] tracking-[0.42em] uppercase text-sm mb-4"
+            className="mb-4 text-xs uppercase tracking-[0.36em] text-[#f1a35a]"
           >
             Nuestro Espacio
           </motion.p>
@@ -65,16 +65,16 @@ export default function Gallery() {
             initial={{ opacity: 0, y: 28 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1 }}
-            className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl text-[#f5f0e8] mb-6"
+            className="mb-6 font-[family-name:var(--font-playfair)] text-4xl text-[#fff8ee] sm:text-6xl"
           >
             Galería{" "}
-            <span className="italic text-[#d4622a]">Premium</span>
+            <span className="italic text-[#e78a45]">Premium</span>
           </motion.h2>
           <motion.div
             initial={{ scaleX: 0 }}
             animate={isInView ? { scaleX: 1 } : {}}
             transition={{ delay: 0.2 }}
-            className="w-20 h-[2px] bg-gradient-to-r from-[#722f37] to-[#d4622a] mx-auto"
+            className="mx-auto h-px w-24 bg-gradient-to-r from-transparent via-[#e78a45] to-transparent"
           />
         </div>
 
@@ -88,7 +88,7 @@ export default function Gallery() {
               transition={{ duration: 0.5, delay: index * 0.07 }}
               whileHover={{ scale: 1.02 }}
               onClick={() => openLightbox(index)}
-              className="group relative break-inside-avoid mb-4 overflow-hidden rounded-2xl cursor-pointer"
+              className="group relative mb-4 break-inside-avoid cursor-pointer overflow-hidden rounded-[26px] border border-[#fff4e3]/8 bg-[#130f0c]"
             >
               <div
                 className={`relative w-full ${aspectClasses[index % 3]}`}
@@ -101,9 +101,9 @@ export default function Gallery() {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d]/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#090706]/78 via-transparent to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
                 <div className="absolute bottom-3 left-3 opacity-0 group-hover:opacity-100 transition-all duration-400 translate-y-2 group-hover:translate-y-0">
-                  <span className="text-[#f5f0e8] text-xs tracking-widest uppercase px-2.5 py-1 bg-[#722f37]/85 rounded">
+                  <span className="rounded-full bg-[#722f37]/90 px-3 py-1.5 text-xs uppercase tracking-widest text-[#fff8ee]">
                     {img.category}
                   </span>
                 </div>

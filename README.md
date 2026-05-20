@@ -16,6 +16,18 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## WordPress
+
+La carta puede cargarse desde WordPress usando la REST API. Copia `.env.example` a `.env.local` y configura:
+
+```bash
+WORDPRESS_API_URL=https://tu-wordpress.com
+WORDPRESS_MENU_ENDPOINT=/wp-json/wp/v2/menu_item
+WORDPRESS_MENU_PER_PAGE=100
+```
+
+El endpoint esperado devuelve items de carta con `title.rendered`, `excerpt.rendered` o `content.rendered`, imagen destacada y campos `acf` o `meta` para `price`/`precio`, `category`/`categoria` e `image`/`imagen`. Si WordPress no esta configurado o no responde, la web usa la carta local como respaldo.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

@@ -17,28 +17,29 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lostroncosrestobar.com"),
+  metadataBase: new URL("https://los-troncos-web-info.vercel.app"),
   title: {
-    default: "Los Troncos Resto Bar | Rodizio de Pizzas en Puerto Rico, Misiones",
+    default: "Los Troncos Resto Bar | Restaurante en Puerto Rico, Misiones",
     template: "%s | Los Troncos Resto Bar",
   },
   description:
-    "Descubrí el mejor rodizio de pizzas en Puerto Rico, Misiones. Los Troncos Resto Bar te ofrece una experiencia gastronómica única con pizzas ilimitadas, tragos artesanales y el mejor ambiente nocturno.",
+    "Los Troncos Resto Bar en Puerto Rico, Misiones. Cocina artesanal, pizzas, hamburguesas, milanesas, tragos y reservas por WhatsApp en un ambiente calido y moderno.",
   keywords: [
-    "rodizio de pizzas",
     "restobar en Puerto Rico Misiones",
     "pizzas",
+    "hamburguesas",
+    "milanesas",
     "Los Troncos Restobar",
     "restaurant Puerto Rico Misiones",
-    "cena romántica Misiones",
+    "cena romantica Misiones",
     "tragos artesanales",
     "resto bar Misiones",
     "pizza Puerto Rico",
   ],
   openGraph: {
-    title: "Los Troncos Resto Bar | Rodizio de Pizzas",
+    title: "Los Troncos Resto Bar | Puerto Rico, Misiones",
     description:
-      "El mejor rodizio de pizzas en Puerto Rico, Misiones. Una experiencia gastronómica premium con ambiente nocturno.",
+      "Landing oficial de Los Troncos Resto Bar: cocina artesanal, tragos, reservas y ubicacion en Puerto Rico, Misiones.",
     type: "website",
     locale: "es_AR",
     siteName: "Los Troncos Resto Bar",
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Los Troncos Resto Bar",
-    description: "Rodizio de Pizzas en Puerto Rico, Misiones",
+    description: "Restaurante y bar en Puerto Rico, Misiones",
   },
   robots: {
     index: true,
@@ -61,7 +62,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} ${playfair.variable}`}>
-      <body className="bg-[#0d0d0d] text-[#f5f0e8] antialiased overflow-x-hidden">
+      <body className="bg-[#090706] text-[#f5f0e8] antialiased overflow-x-hidden">
         {children}
       </body>
     </html>

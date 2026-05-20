@@ -95,7 +95,7 @@ export default function Location() {
           </div>
 
           {/* Google Maps */}
-          <div className="rounded-2xl overflow-hidden border border-[#2c1f0e]/40 h-80 lg:h-[420px]">
+          <div className="h-80 overflow-hidden rounded-[30px] border border-[#fff4e3]/8 shadow-[0_24px_80px_rgba(0,0,0,0.26)] lg:h-[420px]">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3573.4!2d-55.0299537!3d-26.8197802!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94f8271ff888eb2d%3A0x89463a53aaf7caf8!2sLos%20Troncos%20Resto%20Bar!5e0!3m2!1ses!2sar!4v1715200000000!5m2!1ses!2sar"
               width="100%"

@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
+import { ArrowRight, CalendarDays, ChevronDown } from "lucide-react";
 
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -12,131 +12,139 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
+  const imageY = useTransform(scrollYProgress, [0, 1], ["0%", "24%"]);
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.78], [1, 0]);
+
+  const scrollTo = (selector: string) => {
+    document.querySelector(selector)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <section
       id="inicio"
       ref={containerRef}
-      className="relative h-screen min-h-[620px] overflow-hidden bg-[#0d0d0d]"
+      className="relative min-h-screen overflow-hidden bg-[#090706]"
     >
-      {/* Background Image with Parallax */}
       <motion.div style={{ y: imageY }} className="absolute inset-0 scale-110">
         <Image
-          src="https://images.unsplash.com/photo-1513104890138-7c749659a591?w=1920&q=85&fit=crop"
-          alt="Pizza artesanal Los Troncos Resto Bar"
+          src="/imagenes/ambiente-05.jpg"
+          alt="Ambiente de Los Troncos Resto Bar"
           fill
           className="object-cover"
           priority
           sizes="100vw"
         />
-        {/* Gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0d0d0d]/65 via-[#0d0d0d]/35 to-[#0d0d0d] z-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0d0d0d]/55 via-transparent to-[#0d0d0d]/25 z-10" />
+        <div className="absolute inset-0 z-10 bg-[#080604]/58" />
+        <div className="absolute inset-0 z-10 bg-[radial-gradient(circle_at_50%_36%,rgba(212,98,42,0.18),transparent_34%),linear-gradient(180deg,rgba(8,6,4,0.35)_0%,rgba(8,6,4,0.2)_38%,#090706_100%)]" />
+        <div className="absolute inset-0 z-10 bg-[linear-gradient(90deg,rgba(8,6,4,0.78)_0%,rgba(8,6,4,0.25)_52%,rgba(8,6,4,0.72)_100%)]" />
       </motion.div>
 
-      {/* Content */}
       <motion.div
         style={{ y: textY, opacity }}
-        className="relative z-20 h-full flex flex-col items-center justify-center text-center px-4 sm:px-6"
+        className="relative z-20 mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-5 pb-20 pt-32 text-center sm:px-6 lg:px-8"
       >
-        {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-[#d4622a] tracking-[0.45em] uppercase text-xs sm:text-sm mb-6 font-light"
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="mb-5 rounded-full border border-[#d4622a]/30 bg-[#120d09]/45 px-4 py-2 text-[10px] font-medium uppercase tracking-[0.32em] text-[#f1a35a] backdrop-blur-md sm:text-xs"
         >
           Puerto Rico · Misiones · Argentina
         </motion.p>
 
-        {/* Main Title */}
         <motion.h1
-          initial={{ opacity: 0, y: 45 }}
+          initial={{ opacity: 0, y: 42 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="font-[family-name:var(--font-playfair)] text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-[100px] font-bold text-[#f5f0e8] leading-tight"
+          transition={{ duration: 0.9, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
+          className="font-[family-name:var(--font-playfair)] text-[clamp(3.6rem,12vw,8.4rem)] font-semibold leading-[0.86] text-[#fff8ee] drop-shadow-[0_22px_55px_rgba(0,0,0,0.55)]"
         >
           Los Troncos
-          <span className="block italic text-[#d4622a] text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl mt-1">
+          <span className="mt-3 block text-[clamp(2rem,6vw,5.5rem)] italic text-[#e78a45]">
             Resto Bar
           </span>
         </motion.h1>
 
-        {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 26 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.75 }}
-          className="text-[#f5f0e8]/75 text-lg sm:text-xl md:text-2xl mt-5 mb-10 max-w-xl tracking-wide font-light"
+          transition={{ duration: 0.7, delay: 0.7 }}
+          className="mt-7 max-w-2xl text-base leading-8 text-[#fff4e3]/78 sm:text-lg md:text-xl"
         >
-          Rodizio de Pizzas en Puerto Rico, Misiones
+          Cocina generosa, tragos de autor y noches con ambiente calido en el
+          corazon de Puerto Rico, Misiones.
         </motion.p>
 
-        {/* Divider */}
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
-          transition={{ duration: 1, delay: 0.9 }}
-          className="w-20 h-px bg-gradient-to-r from-transparent via-[#d4622a] to-transparent mb-10"
+          transition={{ duration: 1, delay: 0.85 }}
+          className="my-9 h-px w-28 bg-gradient-to-r from-transparent via-[#e78a45] to-transparent"
         />
 
-        {/* CTA Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1 }}
-          className="flex flex-col sm:flex-row gap-4"
+          transition={{ duration: 0.7, delay: 0.95 }}
+          className="flex w-full flex-col items-center justify-center gap-3 sm:w-auto sm:flex-row"
         >
           <motion.button
-            whileHover={{ scale: 1.05, backgroundColor: "#d4622a" }}
+            whileHover={{ y: -2, backgroundColor: "#e78a45" }}
             whileTap={{ scale: 0.97 }}
-            onClick={() =>
-              document
-                .querySelector("#reservas")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="px-10 py-4 bg-[#722f37] text-[#f5f0e8] text-sm tracking-[0.22em] uppercase font-medium transition-colors duration-300 rounded"
+            onClick={() => scrollTo("#reservas")}
+            className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-[#722f37] px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#fff8ee] shadow-[0_20px_55px_rgba(114,47,55,0.34)] transition-colors duration-300 sm:w-auto"
           >
+            <CalendarDays size={17} />
             Reservar Mesa
           </motion.button>
           <motion.button
-            whileHover={{ scale: 1.05, borderColor: "#d4622a" }}
+            whileHover={{ y: -2, borderColor: "#e78a45" }}
             whileTap={{ scale: 0.97 }}
-            onClick={() =>
-              document
-                .querySelector("#menu")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-            className="px-10 py-4 border border-[#f5f0e8]/35 text-[#f5f0e8] text-sm tracking-[0.22em] uppercase font-medium transition-all duration-300 rounded hover:border-[#d4622a]"
+            onClick={() => scrollTo("#menu")}
+            className="group flex min-h-12 w-full items-center justify-center gap-2 rounded-full border border-[#fff4e3]/30 bg-[#120d09]/35 px-7 py-4 text-xs font-semibold uppercase tracking-[0.2em] text-[#fff8ee] backdrop-blur-md transition-all duration-300 hover:bg-[#fff4e3]/8 sm:w-auto"
           >
-            Ver Menú
+            Ver Menu
+            <ArrowRight
+              size={17}
+              className="transition-transform duration-300 group-hover:translate-x-1"
+            />
           </motion.button>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 1.1 }}
+          className="mt-10 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-3"
+        >
+          {["Cocina artesanal", "Tragos y bar", "Reservas por WhatsApp"].map(
+            (item) => (
+              <div
+                key={item}
+                className="rounded-2xl border border-[#fff4e3]/10 bg-[#0c0907]/38 px-4 py-3 text-center text-xs uppercase tracking-[0.16em] text-[#fff4e3]/62 backdrop-blur-md"
+              >
+                {item}
+              </div>
+            )
+          )}
         </motion.div>
       </motion.div>
 
-      {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.8, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 cursor-pointer"
-        onClick={() =>
-          document
-            .querySelector("#rodizio")
-            ?.scrollIntoView({ behavior: "smooth" })
-        }
+        className="absolute bottom-6 left-1/2 z-20 flex -translate-x-1/2 cursor-pointer flex-col items-center gap-2"
+        onClick={() => scrollTo("#menu")}
       >
-        <span className="text-[#f5f0e8]/35 text-xs tracking-[0.35em] uppercase">
+        <span className="text-[10px] uppercase tracking-[0.35em] text-[#fff4e3]/38">
           Scroll
         </span>
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
         >
-          <ChevronDown className="text-[#d4622a]" size={20} />
+          <ChevronDown className="text-[#e78a45]" size={20} />
         </motion.div>
       </motion.div>
     </section>

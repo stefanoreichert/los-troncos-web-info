@@ -11,7 +11,7 @@ const reviews = [
   },
   {
     stars: 5,
-    text: "Fuimos en grupo y pedimos el rodizio de pizzas, una experiencia increíble. Las pizzas llegaban una tras otra y todas estaban muy ricas. El servicio fue muy atento y el local es muy agradable.",
+    text: "Fuimos en grupo y pedimos pizzas, hamburguesas y tragos. Todo llego rapido, muy rico y con una atencion excelente. El local es muy agradable.",
   },
   {
     stars: 5,
@@ -104,11 +104,11 @@ export default function Reviews() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="bg-[#1a1a1a] rounded-2xl p-8 sm:p-12 text-center border border-[#2c1f0e]/40"
+              className="rounded-[30px] border border-[#fff4e3]/8 bg-[#130f0c]/72 p-8 text-center shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:p-12"
             >
               {/* Quote mark */}
               <div className="font-[family-name:var(--font-playfair)] text-[#722f37] text-7xl leading-none mb-4 select-none">
-                "
+                &quot;
               </div>
               <p className="text-[#f5f0e8]/80 text-lg sm:text-xl leading-relaxed italic mb-8 max-w-2xl mx-auto">
                 {reviews[current].text}

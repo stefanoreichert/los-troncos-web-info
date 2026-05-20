@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useMemo, useState, useRef } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import type { MenuGroups, MenuItem } from "../lib/wordpress";
 
 type Category =
   | "Pizzas"
@@ -25,15 +26,13 @@ const categories: Category[] = [
   "Postres",
 ];
 
-type MenuItem = { name: string; description: string; price: string; image: string };
-
-const menuItems: Record<Category, MenuItem[]> = {
+const fallbackMenuItems: MenuGroups = {
   Pizzas: [
     {
       name: "Palo Rosa",
       description: "Nuestra pizza insignia con combinación única de ingredientes frescos, aceitunas, tomates cherry y un toque de pesto artesanal.",
       price: "$16.000",
-      image: "/imagenes/pizza-palo-rosa.jpg",
+      image: "/imagenes/pizza-palorosa.jpg",
     },
     {
       name: "Kurupí",
@@ -45,7 +44,7 @@ const menuItems: Record<Category, MenuItem[]> = {
       name: "Araticú",
       description: "Masa artesanal con queso mozzarella, provolone, jamón, morrones asados, cubierta de cebolla, oliva y orégano.",
       price: "$22.000",
-      image: "/imagenes/pizza-aratigu.jpg",
+      image: "/imagenes/pizza-araticu.jpg",
     },
     {
       name: "Hambur Pizza",
@@ -57,25 +56,25 @@ const menuItems: Record<Category, MenuItem[]> = {
       name: "Timbó",
       description: "Pizza clásica con base de tomate artesanal, queso mozzarella extra y orégano fresco de la casa.",
       price: "$14.000",
-      image: "/imagenes/pizza-palo-rosa.jpg",
+      image: "/imagenes/pizza-kurupi.jpg",
     },
     {
       name: "4 Quesos",
       description: "Selección de cuatro quesos artesanales: mozzarella, provolone, roquefort y parmesano sobre masa crujiente.",
       price: "$18.000",
-      image: "/imagenes/pizza-aratigu.jpg",
+      image: "/imagenes/pizza-araticu.jpg",
     },
     {
       name: "Los Troncos",
       description: "La pizza de la casa: combinación especial del chef con ingredientes premium seleccionados de la temporada.",
       price: "$19.000",
-      image: "/imagenes/pizza-kurupi.jpg",
+      image: "/imagenes/hambur-pizza.jpg",
     },
     {
       name: "Anchico",
       description: "Jamón crudo, rúcula fresca, tomates cherry, lascas de parmesano y reducción de balsámico sobre masa artesanal.",
       price: "$20.000",
-      image: "/imagenes/pizza-aratigu.jpg",
+      image: "/imagenes/pizza-palorosa.jpg",
     },
   ],
   Hamburguesas: [
@@ -151,7 +150,7 @@ const menuItems: Record<Category, MenuItem[]> = {
       name: "A la Suiza",
       description: "Carne jugosa y crujiente con raíces europeas, cubierta con salsa blanca, jamón y queso gratinado al punto justo.",
       price: "$16.500",
-      image: "/imagenes/milanesa-suiza.jpg",
+      image: "/imagenes/milanesa-a-la-suiza.jpeg",
     },
     {
       name: "Los Troncos",
@@ -195,7 +194,7 @@ const menuItems: Record<Category, MenuItem[]> = {
       name: "Pastel de Papa",
       description: "Suave puré de papas cremoso, relleno con carne especiada y gratinado al horno. Combinación cálida y reconfortante con toque gourmet.",
       price: "$15.000",
-      image: "/imagenes/bife-chorizo.jpg",
+      image: "/imagenes/pastel-de-papa.jpg",
     },
   ],
   Empanadas: [
@@ -384,10 +383,10 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.92 }}
       transition={{ duration: 0.3, delay: index * 0.05 }}
-      whileHover={{ y: -6 }}
-      className="group bg-[#1a1a1a] rounded-2xl overflow-hidden border border-[#2c1f0e]/40 hover:border-[#722f37]/45 transition-all duration-400"
+      whileHover={{ y: -8 }}
+      className="group overflow-hidden rounded-[28px] border border-[#fff4e3]/9 bg-[#130f0c]/82 shadow-[0_20px_70px_rgba(0,0,0,0.22)] transition-all duration-500 hover:border-[#e78a45]/35 hover:shadow-[0_26px_80px_rgba(0,0,0,0.38)]"
     >
-      <div className="relative h-44 overflow-hidden">
+      <div className="relative h-72 overflow-hidden sm:h-80 lg:h-96">
         <Image
           src={item.image}
           alt={item.name}
@@ -396,16 +395,18 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1a1a] via-transparent to-transparent" />
-        <div className="absolute bottom-3 right-3 px-3 py-1.5 bg-[#0d0d0d]/80 backdrop-blur-sm text-[#d4622a] text-sm font-semibold rounded-lg">
-          {item.price}
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#130f0c] via-[#130f0c]/10 to-transparent" />
+        {item.price ? (
+          <div className="absolute bottom-4 right-4 rounded-full border border-[#e78a45]/25 bg-[#090706]/82 px-4 py-2 text-sm font-semibold text-[#f1a35a] backdrop-blur-md">
+            {item.price}
+          </div>
+        ) : null}
       </div>
-      <div className="p-4">
-        <h3 className="font-[family-name:var(--font-playfair)] text-lg text-[#f5f0e8] group-hover:text-[#d4622a] transition-colors duration-300 mb-1">
+      <div className="p-5 sm:p-6">
+        <h3 className="mb-2 font-[family-name:var(--font-playfair)] text-2xl text-[#fff8ee] transition-colors duration-300 group-hover:text-[#f1a35a]">
           {item.name}
         </h3>
-        <p className="text-[#f5f0e8]/50 text-sm leading-relaxed">
+        <p className="line-clamp-3 text-sm leading-7 text-[#fff4e3]/54">
           {item.description}
         </p>
       </div>
@@ -413,26 +414,36 @@ function MenuCard({ item, index }: { item: MenuItem; index: number }) {
   );
 }
 
-export default function Menu() {
-  const [activeCategory, setActiveCategory] = useState<Category>("Pizzas");
+export default function Menu({ wordpressItems }: { wordpressItems?: MenuGroups | null }) {
+  const menuItems = wordpressItems ?? fallbackMenuItems;
+  const displayCategories = useMemo(
+    () => (wordpressItems ? Object.keys(menuItems) : categories),
+    [menuItems, wordpressItems]
+  );
+  const [activeCategory, setActiveCategory] = useState(displayCategories[0] ?? "");
   const titleRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(titleRef, { once: true, margin: "-100px" });
+  const currentCategory = displayCategories.includes(activeCategory)
+    ? activeCategory
+    : displayCategories[0] ?? "";
+  const activeItems = menuItems[currentCategory] ?? [];
 
   return (
     <section
       id="menu"
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#111111] relative overflow-hidden"
+      className="relative overflow-hidden bg-[#0d0a08] px-4 py-24 sm:px-6 lg:px-8"
     >
-      <div className="absolute top-0 left-0 w-72 h-72 bg-[#722f37]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="pointer-events-none absolute left-0 top-0 h-72 w-72 rounded-full bg-[#e78a45]/7 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-96 w-96 rounded-full bg-[#722f37]/10 blur-3xl" />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="relative mx-auto max-w-7xl">
         {/* Header */}
-        <div ref={titleRef} className="text-center mb-12">
+        <div ref={titleRef} className="mx-auto mb-12 max-w-2xl text-center">
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5 }}
-            className="text-[#d4622a] tracking-[0.42em] uppercase text-sm mb-4"
+            className="mb-4 text-xs uppercase tracking-[0.36em] text-[#f1a35a]"
           >
             Nuestra Carta
           </motion.p>
@@ -440,16 +451,20 @@ export default function Menu() {
             initial={{ opacity: 0, y: 28 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.65, delay: 0.1 }}
-            className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl text-[#f5f0e8] mb-6"
+            className="mb-5 font-[family-name:var(--font-playfair)] text-4xl text-[#fff8ee] sm:text-6xl"
           >
             Menú{" "}
-            <span className="italic text-[#d4622a]">Completo</span>
+            <span className="italic text-[#e78a45]">Completo</span>
           </motion.h2>
+          <p className="text-sm leading-7 text-[#fff4e3]/56 sm:text-base">
+            Platos pensados para compartir, sabores clasicos y una carta con
+            espiritu de resto bar.
+          </p>
           <motion.div
             initial={{ scaleX: 0 }}
             animate={isInView ? { scaleX: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="w-20 h-[2px] bg-gradient-to-r from-[#722f37] to-[#d4622a] mx-auto"
+            className="mx-auto mt-7 h-px w-24 bg-gradient-to-r from-transparent via-[#e78a45] to-transparent"
           />
         </div>
 
@@ -458,16 +473,16 @@ export default function Menu() {
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap justify-center gap-2 mb-10"
+          className="mb-10 flex gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:justify-center sm:overflow-visible"
         >
-          {categories.map((cat) => (
+          {displayCategories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-5 py-2.5 text-xs tracking-[0.15em] uppercase transition-all duration-300 rounded-full ${
-                activeCategory === cat
-                  ? "bg-[#722f37] text-[#f5f0e8] shadow-lg shadow-[#722f37]/25"
-                  : "bg-[#1a1a1a] text-[#f5f0e8]/60 hover:text-[#f5f0e8] border border-[#2c1f0e]/40 hover:border-[#722f37]/35"
+              className={`min-h-11 shrink-0 rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.15em] transition-all duration-300 ${
+                currentCategory === cat
+                  ? "bg-[#e78a45] text-[#140d08] shadow-lg shadow-[#e78a45]/20"
+                  : "border border-[#fff4e3]/10 bg-[#130f0c] text-[#fff4e3]/62 hover:border-[#e78a45]/35 hover:text-[#fff8ee]"
               }`}
             >
               {cat}
@@ -478,14 +493,14 @@ export default function Menu() {
         {/* Items Grid */}
         <AnimatePresence mode="wait">
           <motion.div
-            key={activeCategory}
+            key={currentCategory}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-7"
           >
-            {menuItems[activeCategory].map((item, i) => (
+            {activeItems.map((item, i) => (
               <MenuCard key={item.name} item={item} index={i} />
             ))}
           </motion.div>

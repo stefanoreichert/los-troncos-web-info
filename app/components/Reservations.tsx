@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import { Phone, Clock, Users, MessageSquare, CheckCircle } from "lucide-react";
+import { CheckCircle, Clock, MessageSquare, Phone, Users } from "lucide-react";
 
 type FormData = {
   nombre: string;
@@ -17,11 +17,17 @@ type FormData = {
 const WHATSAPP_NUMBER = "+543743611895";
 
 const inputClass =
-  "w-full bg-[#1a1a1a] border border-[#2c1f0e]/60 hover:border-[#722f37]/45 focus:border-[#722f37] text-[#f5f0e8] placeholder-[#f5f0e8]/28 rounded-xl px-4 py-3 text-sm outline-none transition-all duration-300 focus:ring-2 focus:ring-[#722f37]/18";
+  "w-full min-h-12 rounded-2xl border border-[#fff4e3]/10 bg-[#0d0a08]/82 px-4 py-3 text-sm text-[#fff8ee] outline-none transition-all duration-300 placeholder:text-[#fff4e3]/28 hover:border-[#e78a45]/35 focus:border-[#e78a45] focus:ring-2 focus:ring-[#e78a45]/14";
 
 const HORARIOS = [
-  "20:00", "20:30", "21:00", "21:30",
-  "22:00", "22:30", "23:00", "23:30",
+  "20:00",
+  "20:30",
+  "21:00",
+  "21:30",
+  "22:00",
+  "22:30",
+  "23:00",
+  "23:30",
 ];
 
 export default function Reservations() {
@@ -51,7 +57,7 @@ export default function Reservations() {
     const msg = `Hola! Quiero hacer una reserva en Los Troncos Resto Bar.
 
 Nombre: ${form.nombre}
-Teléfono: ${form.telefono}
+Telefono: ${form.telefono}
 Personas: ${form.personas}
 Fecha: ${form.fecha}
 Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentarios}` : ""}`.trim();
@@ -65,53 +71,50 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
   return (
     <section
       id="reservas"
-      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#111111] relative overflow-hidden"
+      className="relative overflow-hidden bg-[#090706] px-4 py-24 sm:px-6 lg:px-8"
     >
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#722f37]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="pointer-events-none absolute right-0 top-0 h-96 w-96 rounded-full bg-[#e78a45]/7 blur-3xl" />
 
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div ref={titleRef} className="text-center mb-14">
+      <div className="relative mx-auto max-w-6xl">
+        <div ref={titleRef} className="mx-auto mb-14 max-w-2xl text-center">
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            className="text-[#d4622a] tracking-[0.42em] uppercase text-sm mb-4"
+            className="mb-4 text-xs uppercase tracking-[0.36em] text-[#f1a35a]"
           >
-            Reservá tu lugar
+            Reserva tu lugar
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 28 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.1 }}
-            className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl text-[#f5f0e8] mb-6"
+            className="mb-5 font-[family-name:var(--font-playfair)] text-4xl text-[#fff8ee] sm:text-6xl"
           >
-            Hacé tu{" "}
-            <span className="italic text-[#d4622a]">Reserva</span>
+            Hace tu <span className="italic text-[#e78a45]">Reserva</span>
           </motion.h2>
           <motion.div
             initial={{ scaleX: 0 }}
             animate={isInView ? { scaleX: 1 } : {}}
             transition={{ delay: 0.2 }}
-            className="w-20 h-[2px] bg-gradient-to-r from-[#722f37] to-[#d4622a] mx-auto"
+            className="mx-auto h-px w-24 bg-gradient-to-r from-transparent via-[#e78a45] to-transparent"
           />
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Info Panel */}
+        <div className="grid items-start gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="space-y-6"
+            className="space-y-6 rounded-[30px] border border-[#fff4e3]/8 bg-[#130f0c]/58 p-6 shadow-[0_24px_80px_rgba(0,0,0,0.24)] sm:p-8"
           >
             <div>
-              <h3 className="font-[family-name:var(--font-playfair)] text-2xl text-[#f5f0e8] mb-3">
-                Una experiencia que no olvidarás
+              <h3 className="mb-3 font-[family-name:var(--font-playfair)] text-3xl text-[#fff8ee]">
+                Una noche para disfrutar
               </h3>
-              <p className="text-[#f5f0e8]/60 leading-relaxed">
-                Reservá tu mesa y disfrutá de nuestro rodizio de pizzas
-                ilimitadas, tragos artesanales y el mejor ambiente nocturno en
-                Puerto Rico, Misiones.
+              <p className="leading-7 text-[#fff4e3]/58">
+                Reserva tu mesa y disfruta de nuestra cocina, tragos
+                artesanales y el mejor ambiente nocturno en Puerto Rico,
+                Misiones.
               </p>
             </div>
 
@@ -119,7 +122,7 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
               {
                 icon: <Clock size={18} />,
                 title: "Horarios",
-                desc: "Jue–Dom: desde las 19:30 hs · Lun–Mié cerrado",
+                desc: "Jue-Dom: desde las 19:30 hs · Lun-Mie cerrado",
               },
               {
                 icon: <Phone size={18} />,
@@ -136,59 +139,33 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                 title: "WhatsApp",
                 desc: "Te respondemos en minutos",
               },
-            ].map((item, i) => (
-              <div key={i} className="flex items-start gap-4">
-                <div className="text-[#d4622a] mt-0.5 shrink-0">{item.icon}</div>
+            ].map((item) => (
+              <div key={item.title} className="flex items-start gap-4">
+                <div className="mt-0.5 shrink-0 text-[#e78a45]">{item.icon}</div>
                 <div>
-                  <p className="text-[#f5f0e8] font-medium text-sm">
+                  <p className="text-sm font-medium text-[#fff8ee]">
                     {item.title}
                   </p>
-                  <p className="text-[#f5f0e8]/50 text-sm">{item.desc}</p>
+                  <p className="text-sm text-[#fff4e3]/50">{item.desc}</p>
                 </div>
               </div>
             ))}
 
-            {/* WhatsApp direct button */}
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hola!%20Quiero%20hacer%20una%20reserva.`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-6 py-3 bg-[#25D366] hover:bg-[#1da851] text-white rounded-xl transition-colors duration-300 text-sm font-medium w-fit"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white shadow-[0_16px_34px_rgba(37,211,102,0.18)] transition-colors duration-300 hover:bg-[#1da851]"
             >
-              <svg className="w-5 h-5 fill-white shrink-0" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
-              </svg>
               Reservar por WhatsApp
             </a>
-
-            {/* Redes Sociales */}
-            <div className="flex gap-3 pt-1">
-              <a
-                href="https://www.instagram.com/lostroncos_restobar/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-br from-[#833ab4] via-[#fd1d1d] to-[#fcb045] text-white rounded-xl text-sm font-medium hover:opacity-90 transition-opacity"
-              >
-                <svg className="w-4 h-4 fill-white shrink-0" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                Instagram
-              </a>
-              <a
-                href="https://www.facebook.com/lostroncos.restobar.2025"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 bg-[#1877f2] hover:bg-[#166fe5] text-white rounded-xl text-sm font-medium transition-colors"
-              >
-                <svg className="w-4 h-4 fill-white shrink-0" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                Facebook
-              </a>
-            </div>
           </motion.div>
 
-          {/* Form */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.3 }}
+            className="rounded-[30px] border border-[#fff4e3]/8 bg-[#130f0c]/72 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] sm:p-8"
           >
             {submitted ? (
               <motion.div
@@ -196,20 +173,19 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                 animate={{ opacity: 1, scale: 1 }}
                 className="flex flex-col items-center justify-center py-16 text-center"
               >
-                <CheckCircle className="text-[#25D366] mb-4" size={56} />
-                <h3 className="font-[family-name:var(--font-playfair)] text-2xl text-[#f5f0e8] mb-2">
-                  ¡Redirigiendo a WhatsApp!
+                <CheckCircle className="mb-4 text-[#25D366]" size={56} />
+                <h3 className="mb-2 font-[family-name:var(--font-playfair)] text-2xl text-[#fff8ee]">
+                  Redirigiendo a WhatsApp
                 </h3>
-                <p className="text-[#f5f0e8]/60">
-                  Tu reserva está siendo procesada. Te respondemos a la
-                  brevedad.
+                <p className="text-[#fff4e3]/60">
+                  Tu reserva esta siendo procesada. Te respondemos a la brevedad.
                 </p>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="text-[#f5f0e8]/55 text-xs tracking-widest uppercase mb-2 block">
+                    <label className="mb-2 block text-xs uppercase tracking-widest text-[#fff4e3]/55">
                       Nombre *
                     </label>
                     <input
@@ -222,8 +198,8 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                     />
                   </div>
                   <div>
-                    <label className="text-[#f5f0e8]/55 text-xs tracking-widest uppercase mb-2 block">
-                      Teléfono *
+                    <label className="mb-2 block text-xs uppercase tracking-widest text-[#fff4e3]/55">
+                      Telefono *
                     </label>
                     <input
                       name="telefono"
@@ -238,7 +214,7 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                 </div>
 
                 <div>
-                  <label className="text-[#f5f0e8]/55 text-xs tracking-widest uppercase mb-2 block">
+                  <label className="mb-2 block text-xs uppercase tracking-widest text-[#fff4e3]/55">
                     Email
                   </label>
                   <input
@@ -251,9 +227,9 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                   />
                 </div>
 
-                <div className="grid sm:grid-cols-3 gap-4">
+                <div className="grid gap-4 sm:grid-cols-3">
                   <div>
-                    <label className="text-[#f5f0e8]/55 text-xs tracking-widest uppercase mb-2 block">
+                    <label className="mb-2 block text-xs uppercase tracking-widest text-[#fff4e3]/55">
                       Personas *
                     </label>
                     <select
@@ -272,7 +248,7 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                     </select>
                   </div>
                   <div>
-                    <label className="text-[#f5f0e8]/55 text-xs tracking-widest uppercase mb-2 block">
+                    <label className="mb-2 block text-xs uppercase tracking-widest text-[#fff4e3]/55">
                       Fecha *
                     </label>
                     <input
@@ -285,7 +261,7 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                     />
                   </div>
                   <div>
-                    <label className="text-[#f5f0e8]/55 text-xs tracking-widest uppercase mb-2 block">
+                    <label className="mb-2 block text-xs uppercase tracking-widest text-[#fff4e3]/55">
                       Horario *
                     </label>
                     <select
@@ -306,7 +282,7 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                 </div>
 
                 <div>
-                  <label className="text-[#f5f0e8]/55 text-xs tracking-widest uppercase mb-2 block">
+                  <label className="mb-2 block text-xs uppercase tracking-widest text-[#fff4e3]/55">
                     Comentarios adicionales
                   </label>
                   <textarea
@@ -314,21 +290,21 @@ Horario: ${form.horario} hs${form.comentarios ? `\nComentarios: ${form.comentari
                     value={form.comentarios}
                     onChange={handleChange}
                     rows={3}
-                    placeholder="Alergias, ocasión especial, preferencias de mesa..."
+                    placeholder="Alergias, ocasion especial, preferencias de mesa..."
                     className={`${inputClass} resize-none`}
                   />
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={{ y: -2, backgroundColor: "#e78a45" }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full py-4 bg-[#722f37] hover:bg-[#d4622a] text-[#f5f0e8] tracking-[0.22em] uppercase text-sm font-medium rounded-xl transition-colors duration-300"
+                  className="min-h-13 w-full rounded-full bg-[#722f37] px-6 py-4 text-sm font-semibold uppercase tracking-[0.18em] text-[#fff8ee] shadow-[0_18px_45px_rgba(114,47,55,0.24)] transition-colors duration-300"
                 >
-                  Confirmar Reserva vía WhatsApp
+                  Confirmar via WhatsApp
                 </motion.button>
-                <p className="text-[#f5f0e8]/28 text-xs text-center">
-                  Al confirmar, serás redirigido a WhatsApp para completar tu
+                <p className="text-center text-xs text-[#fff4e3]/32">
+                  Al confirmar, seras redirigido a WhatsApp para completar tu
                   reserva.
                 </p>
               </form>
